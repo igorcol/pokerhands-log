@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
     activePlayer,
+    frameIntervalMs,
     lastActionsThisStreet,
     phaseAtFrame,
     seatLayout,
@@ -15,13 +16,13 @@ import type { Hand } from '@/lib/poker/types'
 import { Controls } from './Controls'
 import { Table } from './Table'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SPEEDS = [0.5, 1, 2] as const
-const BASE_INTERVAL_MS = 550
+const DEFAULT_JUMP_DELAY_MS = 600
 
-// Orquestra o replay: um índice de frame local, um timer que avança 1 por vez
-// Nunca interpola, nunca pula direto pro alvo, scrub e passo são a mesma operação (setFrame)
-// Atalhos de teclado. Ainda sem animação (Fase 4d) nem navegação entre mãos (4e).
-
+// Orquestra o replay: frame local, timer com timing orgânico (frameIntervalMs), e
+// atalhos de teclado. `step`/`jumpTo` decidem passo-vs-salto na origem — só o tick
+// automático e o passo pra frente animam; tudo o mais troca o estado direto.
 export function ReplayStage({ hand }: { hand: Hand }) {
     const router = useRouter()
 
@@ -30,10 +31,26 @@ export function ReplayStage({ hand }: { hand: Hand }) {
     const segments = useMemo(() => streetSegments(timeline), [timeline])
 
     const [frame, setFrame] = useState(0)
+    const [instant, setInstant] = useState(true)
     const [isPlaying, setIsPlaying] = useState(false)
     const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(1)
 
     const clampedFrame = Math.min(Math.max(frame, 0), timeline.length)
+
+    // useCallback aqui não é otimização — é pra o efeito do teclado não re-registrar o
+    // listener a cada render só porque estas funções foram recriadas.
+    const step = useCallback(() => {
+        setInstant(false)
+        setFrame((f) => Math.min(f + 1, timeline.length))
+    }, [timeline.length])
+
+    const jumpTo = useCallback(
+        (target: number) => {
+            setInstant(true)
+            setFrame(Math.min(Math.max(target, 0), timeline.length))
+        },
+        [timeline.length],
+    )
 
     const state = useMemo(
         () => applyEvents(hand, timeline.slice(0, clampedFrame)),
@@ -50,19 +67,23 @@ export function ReplayStage({ hand }: { hand: Hand }) {
     const phase = useMemo(() => phaseAtFrame(segments, clampedFrame), [segments, clampedFrame])
 
     useEffect(() => {
-        if (!isPlaying || clampedFrame >= timeline.length) return
+        if (!isPlaying) return
+        if (clampedFrame >= timeline.length) return
+
+        const lastEvent = clampedFrame > 0 ? timeline[clampedFrame - 1] : null
+        const delay = (lastEvent ? frameIntervalMs(lastEvent) : DEFAULT_JUMP_DELAY_MS) / speed
+
         const timer = setTimeout(() => {
+            setInstant(false)
             setFrame((f) => {
                 const next = Math.min(f + 1, timeline.length)
                 if (next >= timeline.length) setIsPlaying(false)
                 return next
             })
-        }, BASE_INTERVAL_MS / speed)
+        }, delay)
         return () => clearTimeout(timer)
-    }, [isPlaying, clampedFrame, timeline.length, speed])
+    }, [isPlaying, clampedFrame, timeline, speed])
 
-    // Ignora quando o foco está num campo de texto — não existe nenhum agora, mas evita
-    // que espaço/setas quebrem uma busca ou filtro que venha a entrar na tela depois.
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
             const target = event.target as HTMLElement | null
@@ -71,24 +92,24 @@ export function ReplayStage({ hand }: { hand: Hand }) {
             switch (event.key) {
                 case ' ':
                     event.preventDefault()
-                    if (!isPlaying && clampedFrame >= timeline.length) setFrame(0)
+                    if (!isPlaying && clampedFrame >= timeline.length) jumpTo(0)
                     setIsPlaying((p) => !p)
                     break
                 case 'ArrowRight':
                     setIsPlaying(false)
-                    setFrame((f) => Math.min(f + 1, timeline.length))
+                    step()
                     break
                 case 'ArrowLeft':
                     setIsPlaying(false)
-                    setFrame((f) => Math.max(f - 1, 0))
+                    jumpTo(clampedFrame - 1)
                     break
                 case 'Home':
                     setIsPlaying(false)
-                    setFrame(0)
+                    jumpTo(0)
                     break
                 case 'End':
                     setIsPlaying(false)
-                    setFrame(timeline.length)
+                    jumpTo(timeline.length)
                     break
                 case '1':
                 case '2':
@@ -100,7 +121,7 @@ export function ReplayStage({ hand }: { hand: Hand }) {
                     const segment = segments.find((s) => s.phase === targetPhase)
                     if (segment) {
                         setIsPlaying(false)
-                        setFrame(segment.startFrame)
+                        jumpTo(segment.startFrame)
                     }
                     break
                 }
@@ -112,7 +133,7 @@ export function ReplayStage({ hand }: { hand: Hand }) {
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [timeline.length, segments, router, isPlaying, clampedFrame])
+      }, [timeline.length, segments, router, isPlaying, clampedFrame, step, jumpTo])
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-base p-10">
@@ -122,6 +143,7 @@ export function ReplayStage({ hand }: { hand: Hand }) {
                 layout={layout}
                 activePlayerName={activePlayerName}
                 lastActions={lastActions}
+                instant={instant}
             />
             <Controls
                 frame={clampedFrame}
@@ -131,28 +153,28 @@ export function ReplayStage({ hand }: { hand: Hand }) {
                 speed={speed}
                 segments={segments}
                 onTogglePlay={() => {
-                    if (!isPlaying && clampedFrame >= timeline.length) setFrame(0)
+                    if (!isPlaying && clampedFrame >= timeline.length) jumpTo(0)
                     setIsPlaying((p) => !p)
                 }}
                 onStepBack={() => {
                     setIsPlaying(false)
-                    setFrame((f) => Math.max(f - 1, 0))
+                    jumpTo(clampedFrame - 1)
                 }}
                 onStepForward={() => {
                     setIsPlaying(false)
-                    setFrame((f) => Math.min(f + 1, timeline.length))
+                    step()
                 }}
                 onJumpStart={() => {
                     setIsPlaying(false)
-                    setFrame(0)
+                    jumpTo(0)
                 }}
                 onJumpEnd={() => {
                     setIsPlaying(false)
-                    setFrame(timeline.length)
+                    jumpTo(timeline.length)
                 }}
                 onJump={(target) => {
                     setIsPlaying(false)
-                    setFrame(target)
+                    jumpTo(target)
                 }}
                 onSpeedChange={setSpeed}
             />

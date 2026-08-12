@@ -41,15 +41,20 @@ export function Table({
   layout,
   activePlayerName,
   lastActions,
+  instant,
 }: {
   hand: Hand
   state: TableState
   layout: SeatSlot[]
   activePlayerName: string | null
   lastActions: Map<string, LastAction>
+  instant: boolean
 }) {
   return (
-    <div className="relative aspect-[16/9.4] w-full max-w-[min(90vw,1200px)]">
+    <div
+      className="relative aspect-[16/9.4] w-full max-w-[min(90vw,1200px)]"
+      data-instant={instant}
+    >
       <div
         className="absolute rounded-full"
         style={{

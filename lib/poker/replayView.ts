@@ -143,8 +143,8 @@ export function formatPhase(phase: ReplayPhase): string {
   return PHASE_LABEL[phase];
 }
 
-// Em qual fase um frame específico cai. Frame vai de 0 a timeline.length 
-// (é "quantos eventos já foram aplicados", não um índice de evento). 
+// Em qual fase um frame específico cai. Frame vai de 0 a timeline.length
+// (é "quantos eventos já foram aplicados", não um índice de evento).
 // Daí o fallback pro último segmento quando frame === timeline.length, fora do range de qualquer endFrame.
 export function phaseAtFrame(
   segments: StreetSegment[],
@@ -154,4 +154,32 @@ export function phaseAtFrame(
     (s) => frame >= s.startFrame && frame < s.endFrame,
   );
   return found?.phase ?? segments[segments.length - 1]?.phase ?? "preflop";
+}
+
+// * Tempo de exibição de um evento antes de avançar pro próximo — organico / não uniforme.
+// Depende do que ACABOU de ser revelado, não do que vem a seguir: você vê o all-in
+// acontecer, tem um instante pra absorver, aí continua. Ambient quase não conta;
+// street e all-in são os momentos que merecem peso de verdade.
+export function frameIntervalMs(event: ReplayEvent): number {
+  switch (event.kind) {
+    case "ambient":
+      return 300;
+    case "post":
+      return 440;
+    case "deal-hole":
+      return 700;
+    case "action":
+      if (event.isAllIn) return 1500;
+      if (event.type === "bet" || event.type === "raise") return 1200;
+      if (event.type === "call") return 900;
+      return 700;
+    case "uncalled-return":
+      return 800;
+    case "street":
+      return 1900;
+    case "reveal":
+      return 1500;
+    case "collect":
+      return 1400;
+  }
 }

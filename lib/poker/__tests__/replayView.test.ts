@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseHandHistory } from "../parseHandHistory";
-import { activePlayer, formatPhase, lastActionsThisStreet, phaseAtFrame, seatLayout, streetSegments } from "../replayView";
+import { activePlayer, formatPhase, frameIntervalMs, lastActionsThisStreet, phaseAtFrame, seatLayout, streetSegments } from "../replayView";
 import { buildTimeline, ReplayEvent } from "../timeline";
 import { fixture } from "./fixture";
 
@@ -173,5 +173,43 @@ describe('formatPhase / phaseAtFrame', () => {
   it('formats every phase in pt-BR', () => {
     expect(formatPhase('preflop')).toBe('pré-flop')
     expect(formatPhase('showdown')).toBe('showdown')
+  })
+})
+
+
+describe('frameIntervalMs', () => {
+  it('weighs all-in above a regular bet, and bet above a call above a fold', () => {
+    const allIn: ReplayEvent = { kind: 'action', street: 'flop', player: 'x', type: 'call', amount: 1, totalBet: 1, isAllIn: true }
+    const bet: ReplayEvent = { kind: 'action', street: 'flop', player: 'x', type: 'bet', amount: 1, totalBet: 1, isAllIn: false }
+    const call: ReplayEvent = { kind: 'action', street: 'flop', player: 'x', type: 'call', amount: 1, totalBet: 1, isAllIn: false }
+    const fold: ReplayEvent = { kind: 'action', street: 'flop', player: 'x', type: 'fold', amount: 0, totalBet: 0, isAllIn: false }
+
+    expect(frameIntervalMs(allIn)).toBeGreaterThan(frameIntervalMs(bet))
+    expect(frameIntervalMs(bet)).toBeGreaterThan(frameIntervalMs(call))
+    expect(frameIntervalMs(call)).toBeGreaterThan(frameIntervalMs(fold))
+  })
+
+  it('gives street the longest pause of all, ambient the shortest', () => {
+    const street: ReplayEvent = { kind: 'street', street: 'flop', cards: [] }
+    const ambient: ReplayEvent = { kind: 'ambient', player: null, text: 'x' }
+    const others: ReplayEvent[] = [
+      { kind: 'post', player: 'x', postType: 'sb', amount: 1 },
+      { kind: 'deal-hole', player: 'x', cards: [] },
+      { kind: 'action', street: 'flop', player: 'x', type: 'call', amount: 1, totalBet: 1, isAllIn: false },
+      { kind: 'uncalled-return', player: 'x', amount: 1 },
+      { kind: 'reveal', player: 'x', cards: [], description: null, source: 'showdown' },
+      { kind: 'collect', player: 'x', amount: 1 },
+    ]
+
+    for (const event of others) {
+      expect(frameIntervalMs(street)).toBeGreaterThanOrEqual(frameIntervalMs(event))
+      expect(frameIntervalMs(ambient)).toBeLessThanOrEqual(frameIntervalMs(event))
+    }
+  })
+
+  it('handles every event kind in a real timeline without throwing', () => {
+    for (const event of splitPotTimeline) {
+      expect(frameIntervalMs(event)).toBeGreaterThan(0)
+    }
   })
 })

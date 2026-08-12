@@ -37,3 +37,11 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
 }
+
+/* Interruptor central de animação: durante um salto (início/fim/scrub/voltar), mata
+   toda transição da mesa de uma vez — nenhum componente-folha precisa saber se é
+   passo ou salto, só declara sua transição normal e este seletor a desliga quando
+   não deve rodar. */
+[data-instant='true'] * {
+  transition-duration: 0s !important;
+}

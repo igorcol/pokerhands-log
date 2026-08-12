@@ -6,11 +6,11 @@ import { CardBack } from '@/components/poker/CardBack'
 import { HoleCards } from '@/components/poker/PlayingCard'
 import { Avatar } from './Avatar'
 import { BetChips } from './BetChips'
+import { EnterTransition } from './EnterTransition'
 
-// Três camadas sobrepostas: cartas atrás, avatar no meio, placa embaixo. 
-// Cada uma invade a anterior com margem negativa. 
-// É essa sobreposição que faz o assento ler como fluido em vez de formulário.
-
+// Três camadas sobrepostas: cartas atrás, avatar no meio, placa embaixo. As cartas
+// nunca desmontam (só trocam de opacidade) — é o que permite o fold animar suavemente
+// sem precisar de truque de saída.
 export function TableSeat({
     slot,
     anchor,
@@ -42,6 +42,7 @@ export function TableSeat({
     const isFolded = playerState?.isFolded && !seat.isSittingOut
     const streetBet = playerState?.streetBet ?? 0
     const holeCards = playerState?.holeCards ?? null
+    const isDimmed = seat.isSittingOut || isFolded
 
     const badgeText = lastAction?.isAllIn
         ? 'ALL IN'
@@ -52,26 +53,27 @@ export function TableSeat({
     return (
         <>
             <div
-                className={`absolute flex w-32.5 -translate-x-1/2 -translate-y-1/2 flex-col items-center ${seat.isSittingOut ? 'opacity-20' : isFolded ? 'opacity-30' : ''
+                className={`absolute flex w-32.5 -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-opacity duration-300 ${seat.isSittingOut ? 'opacity-20' : isFolded ? 'opacity-30' : 'opacity-100'
                     }`}
                 style={{ left: `${anchor.left}%`, top: `${anchor.top}%` }}
             >
-                {!seat.isSittingOut && !isFolded && (
-                    <div className="z-0 -mb-4.75 flex">
-                        {holeCards ? (
-                            <HoleCards cards={holeCards} size="table" />
-                        ) : (
-                            <>
-                                <div className="-rotate-6">
-                                    <CardBack size="table" />
-                                </div>
-                                <div className="-ml-3 rotate-6">
-                                    <CardBack size="table" />
-                                </div>
-                            </>
-                        )}
-                    </div>
-                )}
+                <div
+                    className={`z-0 -mb-4.75 flex transition-opacity duration-300 ${isDimmed ? 'opacity-0' : 'opacity-100'
+                        }`}
+                >
+                    {holeCards ? (
+                        <HoleCards cards={holeCards} size="table" />
+                    ) : (
+                        <>
+                            <div className="-rotate-6">
+                                <CardBack size="table" />
+                            </div>
+                            <div className="-ml-3 rotate-6">
+                                <CardBack size="table" />
+                            </div>
+                        </>
+                    )}
+                </div>
 
                 <Avatar name={seat.playerName} isHero={slot.isHero} glow={isActing ? 'acting' : 'none'} />
 
@@ -80,26 +82,32 @@ export function TableSeat({
                     style={{ background: slot.isHero ? 'rgba(30,30,36,0.96)' : 'rgba(20,20,24,0.94)' }}
                 >
                     {badgeText && (
-                        <div
-                            className="absolute -top-2 left-1/2 z-3 -translate-x-1/2 whitespace-nowrap rounded-full px-2 font-mono text-[8.5px] font-semibold tracking-wider"
-                            style={
-                                lastAction?.isAllIn
-                                    ? {
-                                        background: 'var(--color-carmine)',
-                                        color: '#fff',
-                                        boxShadow: '0 0 16px rgba(224,49,62,0.5)',
+                        <div className="absolute -top-2 left-1/2 z-3 -translate-x-1/2">
+                            <EnterTransition>
+                                <div
+                                    className="whitespace-nowrap rounded-full px-2 font-mono text-[8.5px] font-semibold tracking-wider"
+                                    style={
+                                        lastAction?.isAllIn
+                                            ? {
+                                                background: 'var(--color-carmine)',
+                                                color: '#fff',
+                                                boxShadow: '0 0 16px rgba(224,49,62,0.5)',
+                                            }
+                                            : {
+                                                background: '#2C1519',
+                                                color: 'var(--color-carmine-soft)',
+                                                boxShadow: '0 0 0 1px rgba(224,49,62,0.35)',
+                                            }
                                     }
-                                    : {
-                                        background: '#2C1519',
-                                        color: 'var(--color-carmine-soft)',
-                                        boxShadow: '0 0 0 1px rgba(224,49,62,0.35)',
-                                    }
-                            }
-                        >
-                            {badgeText}
+                                >
+                                    {badgeText}
+                                </div>
+                            </EnterTransition>
                         </div>
                     )}
-                    <div className={`truncate text-[11.5px] font-medium ${slot.isHero ? 'text-ink' : 'text-ink-2'}`}>
+                    <div
+                        className={`truncate text-[11.5px] font-medium ${slot.isHero ? 'text-ink' : 'text-ink-2'}`}
+                    >
                         {seat.playerName}
                     </div>
                     <div className="mt-px font-mono text-sm font-medium tracking-tight">
@@ -113,7 +121,9 @@ export function TableSeat({
                     className="absolute -translate-x-1/2 -translate-y-1/2"
                     style={{ left: `${betAnchor.left}%`, top: `${betAnchor.top}%` }}
                 >
-                    <BetChips amount={streetBet} bigBlind={hand.bigBlind} />
+                    <EnterTransition>
+                        <BetChips amount={streetBet} bigBlind={hand.bigBlind} />
+                    </EnterTransition>
                 </div>
             )}
         </>
