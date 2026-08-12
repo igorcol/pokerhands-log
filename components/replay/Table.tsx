@@ -49,7 +49,7 @@ export function Table({
   lastActions: Map<string, LastAction>
 }) {
   return (
-    <div className="relative aspect-[16/9.4] w-full max-w-235">
+    <div className="relative aspect-[16/9.4] w-full max-w-[min(90vw,1200px)]">
       <div
         className="absolute rounded-full"
         style={{
