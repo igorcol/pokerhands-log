@@ -1,6 +1,6 @@
 # PokerHands — Visão Geral
 
-> **Status:** Fase 1 (parser) concluída — 38/38 testes. Ver [`ROADMAP.md`](./ROADMAP.md). Nada de UI ainda.
+> **Status:** Fases 1 e 2 concluídas — 56/56 testes (parser + timeline + reducer). Ver [`ROADMAP.md`](./ROADMAP.md). Nada de UI ainda.
 > **Última atualização:** 2026-08-12
 
 ---

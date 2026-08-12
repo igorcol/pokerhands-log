@@ -1,6 +1,6 @@
 # PokerHands — Roadmap
 
-> **Status:** Fase 1 concluída (38/38 testes). Fase 2 não iniciada.
+> **Status:** Fases 1 e 2 concluídas (56/56 testes). Fase 3 não iniciada.
 > **Última atualização:** 2026-08-12
 > Contexto e decisões de arquitetura em [`OVERVIEW.md`](./OVERVIEW.md).
 
@@ -58,25 +58,24 @@ Um commit (`d1aafb0`). Node 24.
 
 **Não entra:** UI, leitura de diretório, torneio, side pot calculado (usa-se os `collected`).
 
-## Fase 2 — Timeline + reducer
+## Fase 2 — Timeline + reducer ✅
 
 **Objetivo:** o motor do replay, ainda sem pixel algum.
 
 **Entrega**
-- `buildTimeline(hand: Hand): ReplayEvent[]`
-- `applyEvents(hand, events): TableState` — pura
+- `buildTimeline(hand: Hand): ReplayEvent[]` — timeline plana de 8 tipos de evento
+- `applyEvents(hand, events): TableState` — pura, 56 testes no total
 - Derivação de posições (BTN, SB, BB, UTG, MP, CO) a partir do botão e dos jogadores ativos
-- Runout automático em streets sem ação
+- Runout automático em streets sem ação (board revela normalmente mesmo sem `action` naquela street)
 
 **Pronto quando**
-- [ ] Aplicar a timeline **completa** reproduz exatamente os stacks finais do SUMMARY
-- [ ] `applyEvents(events.slice(0, i))` é determinístico para todo `i`
-- [ ] Posições conferem contra a linha `Seat N: nome (button)` do SUMMARY
-- [ ] Testado sem renderizar nada
+- [x] Aplicar a timeline **completa** reproduz o stack inicial da *próxima* mão pra
+      todo jogador presente nas duas (o SUMMARY não lista stacks — essa é a validação real)
+- [x] `applyEvents(events.slice(0, i))` é determinístico para todo `i`
+- [x] Posições conferem contra `Seat N: nome (button/small blind/big blind)` do SUMMARY, nas 11 mãos
+- [x] Testado sem renderizar nada
 
 **Não entra:** React, animação, componentes.
-
----
 
 ## Fase 3 — Lista
 
