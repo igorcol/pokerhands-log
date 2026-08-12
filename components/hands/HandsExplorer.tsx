@@ -49,7 +49,11 @@ export function HandsExplorer({
   const periodItems = filterByPeriod(items, period, new Date())
   const summary = summarizeHandListItems(periodItems)
   const stackCurve = buildStackCurve(periodItems)
-  const visibleItems = filterHandListItems(periodItems, filter)
+
+  const filteredItems = filterHandListItems(periodItems, filter)
+  // A lista mostra a mão mais recente no topo; resumo e sparkline continuam em ordem
+  // ascendente (senão o cálculo do stack acumulado inverteria junto).
+  const visibleItems = filter === 'biggest-pots' ? filteredItems : [...filteredItems].reverse()
 
   return (
     <>
@@ -77,9 +81,8 @@ export function HandsExplorer({
                 key={p.key}
                 type="button"
                 onClick={() => setPeriod(p.key)}
-                className={`cursor-pointer rounded-[7px] px-3.5 py-1.5 text-[13px] ${
-                  period === p.key ? 'bg-surface-3 font-medium text-ink' : 'text-ink-2'
-                }`}
+                className={`cursor-pointer rounded-[7px] px-3.5 py-1.5 text-[13px] ${period === p.key ? 'bg-surface-3 font-medium text-ink' : 'text-ink-2'
+                  }`}
               >
                 {p.label}
               </button>
@@ -99,9 +102,8 @@ export function HandsExplorer({
               key={f.key}
               type="button"
               onClick={() => setFilter(f.key)}
-              className={`-mb-px cursor-pointer border-b-2 pb-3 text-sm ${
-                filter === f.key ? 'border-carmine font-medium text-ink' : 'border-transparent text-ink-2'
-              }`}
+              className={`-mb-px cursor-pointer border-b-2 pb-3 text-sm ${filter === f.key ? 'border-carmine font-medium text-ink' : 'border-transparent text-ink-2'
+                }`}
             >
               {f.label}
             </button>

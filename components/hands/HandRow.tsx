@@ -1,12 +1,32 @@
 import { Board, HoleCards } from '@/components/poker/PlayingCard'
-import { formatChips, formatNet, formatOutcome, formatTime } from '@/lib/poker/format'
+import { formatChips, formatNet, formatOutcome, formatTime, outcomeTone } from '@/lib/poker/format'
 import type { HandListItem } from '@/lib/poker/handListItem'
 
 // Uma linha da lista. Ainda não navega — a rota de replay é a Fase 4; o hover já existe
 // pra validar a affordance. Posição só ganha cor cheia quando importa (BTN/SB/BB).
+// Tom de resultado (win/loss/neutral) vem de outcomeTone, não de isShowdown — showdown
+// ganho e perdido não podem parecer iguais, e fold fica neutro de propósito (ver format.ts).
 
 const KEY_POSITIONS = new Set(['BTN', 'SB', 'BB'])
 const GRID = 'grid grid-cols-[66px_88px_44px_1fr_92px_108px] items-center gap-4'
+
+const ROW_ACCENT = {
+  win: 'shadow-[inset_2px_0_0_var(--color-mint)]',
+  loss: 'shadow-[inset_2px_0_0_var(--color-carmine)]',
+  neutral: '',
+}
+
+const ROW_BG = {
+  win: 'bg-mint/5',
+  loss: 'bg-carmine/5',
+  neutral: '',
+}
+
+const OUTCOME_TEXT = {
+  win: 'text-mint',
+  loss: 'text-carmine-soft',
+  neutral: 'text-ink-3',
+}
 
 export function HandRowHeader() {
   return (
@@ -24,9 +44,11 @@ export function HandRowHeader() {
 }
 
 export function HandRow({ item }: { item: HandListItem }) {
+  const tone = outcomeTone(item.outcome, item.net)
+
   return (
     <div
-      className={`${GRID} cursor-pointer rounded-[11px] border-b border-hairline-soft px-3.5 py-2.5 transition-colors hover:border-transparent hover:bg-surface`}
+      className={`${GRID} cursor-pointer rounded-[11px] border-b border-hairline-soft px-3.5 py-2.5 transition-colors hover:border-transparent hover:bg-surface ${ROW_ACCENT[tone]} ${ROW_BG[tone]}`}
     >
       <div className="font-mono text-xs text-ink-3">{formatTime(item.dateIso)}</div>
       <div className="pl-1">
@@ -39,9 +61,7 @@ export function HandRow({ item }: { item: HandListItem }) {
       </div>
       <div className="flex items-center">
         <Board cards={item.board} />
-        <span
-          className={`ml-3 font-mono text-[10.5px] ${item.isShowdown ? 'text-carmine-soft' : 'text-ink-3'}`}
-        >
+        <span className={`ml-3 font-mono text-[10.5px] ${OUTCOME_TEXT[tone]}`}>
           {formatOutcome(item.outcome)}
         </span>
       </div>

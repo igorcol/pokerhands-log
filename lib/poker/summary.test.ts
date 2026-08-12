@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { formatChips, formatNet, formatOutcome } from './format'
+import { formatChips, formatNet, formatOutcome, outcomeTone } from './format'
 import { withResults } from './handResult'
 import { toHandListItem } from './handListItem'
 import { parseHandHistory } from './parseHandHistory'
@@ -73,5 +73,21 @@ describe('buildStackCurve', () => {
     expect(curve[0]).toBe(5000000)
     expect(curve[curve.length - 1]).toBe(5147400)
     expect(curve).toHaveLength(12)
+  })
+})
+
+describe('outcomeTone', () => {
+  it('is neutral for a fold, even though net is negative', () => {
+    expect(outcomeTone({ kind: 'folded', street: 'flop' }, -250000)).toBe('neutral')
+  })
+
+  it('is win for any non-fold outcome with positive net', () => {
+    expect(outcomeTone({ kind: 'won-without-showdown', street: 'flop' }, 337900)).toBe('win')
+    expect(outcomeTone({ kind: 'showdown-won' }, 314200)).toBe('win')
+    expect(outcomeTone({ kind: 'showdown-split' }, 248100)).toBe('win')
+  })
+
+  it('is loss for a showdown loss', () => {
+    expect(outcomeTone({ kind: 'showdown-lost' }, -550000)).toBe('loss')
   })
 })

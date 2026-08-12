@@ -4,6 +4,8 @@ import type { Street } from './types'
 // Formatação de exibição: centavos → texto, e enums → português. Fica isolado aqui pra
 // a UI nunca fazer conta de dinheiro — e pra trocar pt-BR por outro locale num lugar só.
 
+export type OutcomeTone = 'win' | 'loss' | 'neutral'
+
 const STREET_LABEL: Record<Street, string> = {
   preflop: 'pré-flop',
   flop: 'flop',
@@ -54,4 +56,15 @@ export function formatOutcome(outcome: HandOutcome): string {
 
 export function isShowdown(outcome: HandOutcome): boolean {
   return outcome.kind.startsWith('showdown-')
+}
+
+
+// Fold sempre fica neutro mesmo com net negativo: é o caso comum (7 de 11 mãos no
+// fixture), não a exceção — colorir de vermelho enche a lista de vermelho e apaga o
+// que realmente importa destacar (showdown perdido, pote ganho).
+export function outcomeTone(outcome: HandOutcome, net: number): OutcomeTone {
+  if (outcome.kind === 'folded') return 'neutral'
+  if (net > 0) return 'win'
+  if (net < 0) return 'loss'
+  return 'neutral'
 }
