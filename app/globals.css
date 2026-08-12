@@ -30,3 +30,10 @@ body {
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
 }
+
+/* Scrollbar discreta: a barra padrão do Windows em dark é clara demais e rouba atenção
+   da lista. thin + cor sutil funciona em Chrome e Firefox sem pseudo-elemento. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
