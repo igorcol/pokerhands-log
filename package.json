@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    
     "start": "next start",
+    "start:app": "next start -p 3737",
+
+    "dev": "next dev",
+    
+    "build": "next build",
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest"
