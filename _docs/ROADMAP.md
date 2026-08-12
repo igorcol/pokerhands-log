@@ -1,6 +1,6 @@
 # PokerHands — Roadmap
 
-> **Status:** Fases 1 e 2 concluídas (56/56 testes). Fase 3 não iniciada.
+> **Status:** Fases 1 e 2 concluídas (58/58 testes). Fase 3 não iniciada.
 > **Última atualização:** 2026-08-12
 > Contexto e decisões de arquitetura em [`OVERVIEW.md`](./OVERVIEW.md).
 
