@@ -1,6 +1,6 @@
 # PokerHands — Roadmap
 
-> **Status:** Fase 1 não iniciada.
+> **Status:** Fase 1 concluída (38/38 testes). Fase 2 não iniciada.
 > **Última atualização:** 2026-08-12
 > Contexto e decisões de arquitetura em [`OVERVIEW.md`](./OVERVIEW.md).
 
@@ -24,15 +24,15 @@ Um commit (`d1aafb0`). Node 24.
 
 ---
 
-## Fase 1 — Parser + testes
+## Fase 1 — Parser + testes ✅
 
 **Objetivo:** transformar texto bruto em dado confiável.
 
 **Entrega**
-- Modelo de dados (`Hand`, `Player`, `Action`, `Card`, `Street`, `PostType`)
+- Modelo de dados (`Hand`, `Seat`, `Post`, `Action`, `Card`, `Street`, `PostType`, `Reveal`, `Winner`, `AmbientEvent`)
 - `parseHandHistory(text: string): Hand[]` — puro, sem `fs`, sem `path`
 - Valores monetários em centavos (inteiro)
-- Suite Vitest usando o arquivo real como fixture
+- Suite Vitest usando o arquivo real como fixture (38 testes)
 - Whitelist de verbos: linha não reconhecida gera aviso em dev, nunca descarte silencioso
 
 **Mãos-critério do fixture** (`HH20260812 Octavia II - 250-500`, 11 mãos):
@@ -49,16 +49,14 @@ Um commit (`d1aafb0`). Node 24.
 | `261728025415` | vitória sem showdown · board de 4 cartas (mão parou no turn) |
 
 **Pronto quando**
-- [ ] 11/11 mãos parseadas sem erro
-- [ ] Para toda mão: `soma dos collected + rake == Total pot` da linha de SUMMARY
-- [ ] Hero identificado em todas (pasta `ocolombini2` → jogador `o.colombini2`)
-- [ ] `261727989562` retorna **dois** vencedores
-- [ ] Todas as linhas de ruído classificadas como `ambient` — nenhuma vira ação
-- [ ] Zero linhas desconhecidas no log
+- [x] 11/11 mãos parseadas sem erro
+- [x] Para toda mão: `soma dos collected + rake == Total pot` da linha de SUMMARY
+- [x] Hero identificado em todas via `dealtHoleCards.player` — não precisa da pasta
+- [x] `261727989562` retorna **dois** vencedores
+- [x] Todas as linhas de ruído classificadas como `ambient` — nenhuma vira ação
+- [x] Zero linhas desconhecidas no log (`scanActionStream coverage` cobre as 11 mãos)
 
 **Não entra:** UI, leitura de diretório, torneio, side pot calculado (usa-se os `collected`).
-
----
 
 ## Fase 2 — Timeline + reducer
 

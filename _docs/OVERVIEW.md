@@ -1,6 +1,6 @@
 # PokerHands — Visão Geral
 
-> **Status:** planejamento. Nada implementado além do scaffold do `create-next-app`.
+> **Status:** Fase 1 (parser) concluída — 38/38 testes. Ver [`ROADMAP.md`](./ROADMAP.md). Nada de UI ainda.
 > **Última atualização:** 2026-08-12
 
 ---
@@ -42,7 +42,7 @@ mostrando dado errado com confiança. Tudo abaixo foi encontrado em um único ar
 | 1 | **Seats fora de ordem** | Seats 5,6,7 (`is sitting out`) listados antes de 1,2,3,4,8,9 | Ordem do arquivo ≠ ordem da mesa. A ordem de ação tem que ser derivada do botão, nunca da leitura sequencial |
 | 2 | **Posts extras / blind morto** | `ms spartan: posts small blind 250` + `vinal33: posts big blind 500` + `o.colombini2: posts big blind 500` na mesma mão | Um terceiro post é entrada na mesa (post-in), não o BB. Matemática de pote ingênua quebra na primeira mão |
 | 3 | **Post combinado** | `1948allen: posts small & big blinds 750` | Uma linha, dois valores, um só dos quais é "vivo" |
-| 4 | **Semântica inconsistente de valor** | `raises 2500 to 3000` / `calls 2500` / `bets 3500` | Em `raises X to Y`: X é incremento, Y é total da street. `calls` é incremento. `bets` é total. Fonte clássica de bug de pote |
+| 4 | **Semântica inconsistente de valor** | `raises 2500 to 3000` / `calls 2500` / `bets 3500` | Em `raises X to Y`: **X é o tamanho do raise acima da aposta corrente da mesa, não o desembolso do jogador** — Y é sempre o total real. Em `calls X`: X é sempre o incremento somado ao total anterior do próprio jogador (que pode já vir de um blind postado). `bets X`: X é o total, por ser sempre a primeira aposta da street. Resolvido com um mapa de total-por-jogador-por-street, não com regra fixa por verbo |
 | 5 | **Ruído no meio das ações** | `is connected`, `joins the table at seat #7`, `leaves the table`, `has timed out` | Aparecem entre ações reais — e até **depois** do showdown. Viram ação fantasma se não forem tratados |
 | 6 | **Split pot** | Dois `collected ... from pot` na mesma mão | Um modelo com "um vencedor" já nasce errado |
 | 7 | **Mucks revelados no SUMMARY** | Ação diz `mucks hand`; summary diz `Seat 4: joes555 (button) mucked [8h 7h]` | Informação extra de graça — valiosa justamente para estudo |
@@ -120,38 +120,96 @@ retrabalho no núcleo.
 
 ---
 
-## 5. Modelo de dados (esboço)
+## 5. Modelo de dados
+
+Implementado em [`lib/poker/types.ts`](../lib/poker/types.ts):
 
 ```ts
-type Street = 'preflop' | 'flop' | 'turn' | 'river'
-type ActionType = 'fold' | 'check' | 'call' | 'bet' | 'raise'
-type PostType = 'sb' | 'bb' | 'ante' | 'dead' | 'sb+bb'
+export type Suit = 'h' | 'd' | 'c' | 's'
+export type Rank = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'T' | 'J' | 'Q' | 'K' | 'A'
 
-interface Action {
+export interface Card {
+  rank: Rank
+  suit: Suit
+}
+
+export type Street = 'preflop' | 'flop' | 'turn' | 'river'
+export type PostType = 'sb' | 'bb' | 'sb+bb'
+export type ActionType = 'fold' | 'check' | 'call' | 'bet' | 'raise'
+
+export interface Seat {
+  seatNumber: number
+  playerName: string
+  chips: number
+  isSittingOut: boolean
+}
+
+export interface Post {
+  player: string
+  type: PostType
+  amount: number
+}
+
+export interface Action {
   street: Street
   player: string
   type: ActionType
-  amount: number      // quanto entrou no pote nesta ação (centavos)
-  totalBet: number    // aposta acumulada do jogador na street (centavos)
+  amount: number
+  totalBet: number
   isAllIn: boolean
 }
 
-type ReplayEvent =
-  | { kind: 'post'; player: string; postType: PostType; amount: number }
-  | { kind: 'deal-hole'; player: string; cards: Card[] }
-  | { kind: 'action'; action: Action }
-  | { kind: 'street'; street: Street; cards: Card[] }
-  | { kind: 'return-uncalled'; player: string; amount: number }
-  | { kind: 'reveal'; player: string; cards: Card[]; description: string }
-  | { kind: 'collect'; player: string; amount: number }
-  | { kind: 'ambient'; text: string }   // timeout, joins, leaves
+export interface UncalledBetReturn {
+  player: string
+  amount: number
+}
+
+export interface Reveal {
+  player: string
+  cards: Card[]
+  description: string | null
+  source: 'showdown' | 'summary-muck'
+}
+
+export interface Winner {
+  player: string
+  amount: number
+}
+
+export interface AmbientEvent {
+  player: string | null
+  section: Street | 'summary'
+  text: string
+}
+
+export interface Hand {
+  id: string
+  dateIso: string
+  tableName: string
+  maxSeats: number
+  smallBlind: number
+  bigBlind: number
+  buttonSeat: number
+  seats: Seat[]
+  posts: Post[]
+  dealtHoleCards: { player: string; cards: Card[] } | null
+  actions: Action[]
+  board: Card[]
+  uncalledBets: UncalledBetReturn[]
+  reveals: Reveal[]
+  winners: Winner[]
+  ambientEvents: AmbientEvent[]
+  totalPot: number
+  rake: number
+}
 ```
 
-`Action` carrega **`amount` e `totalBet`** justamente por causa da armadilha #4: a
-inconsistência é resolvida no parser, uma única vez, e o resto da aplicação nunca mais
-precisa pensar nisso.
-
----
+**Não existe campo `heroName`.** A descoberta da Fase 1: hand history pessoal do
+PokerStars só revela cartas de largada (`Dealt to X [...]`) do dono do arquivo —
+nunca de um vilão. Então `dealtHoleCards.player` **já é** o hero, sem precisar
+normalizar o nome da pasta contra os jogadores da mesa. Quem decide tratar isso
+como "o hero" é a camada de apresentação (Fase 3+), não o parser — mantém o
+princípio de que o parser não filtra nada, só descreve o que o arquivo diz.
 
 ## 6. Telas
 
