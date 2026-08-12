@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseHandHistory } from "../parseHandHistory";
-import { activePlayer, seatLayout, streetSegments } from "../replayView";
+import { activePlayer, lastActionsThisStreet, seatLayout, streetSegments } from "../replayView";
 import { buildTimeline, ReplayEvent } from "../timeline";
 import { fixture } from "./fixture";
 
@@ -122,3 +122,35 @@ describe("streetSegments", () => {
     expect(phases).toContain("preflop");
   });
 });
+
+describe('lastActionsThisStreet', () => {
+  it('captures the last action per player within the current street (frame 17)', () => {
+    const actions = lastActionsThisStreet(splitPotTimeline, 17)
+    expect(actions.get('KURFTERRIER')).toEqual({
+      player: 'KURFTERRIER',
+      type: 'call',
+      amount: 558700,
+      isAllIn: true,
+    })
+    expect(actions.get('o.colombini2')).toEqual({
+      player: 'o.colombini2',
+      type: 'bet',
+      amount: 900000,
+      isAllIn: false,
+    })
+  })
+
+  it('is empty right after the street marker, before anyone acts (frame 12)', () => {
+    expect(lastActionsThisStreet(splitPotTimeline, 12).size).toBe(0)
+  })
+
+  it('does not leak the preflop call into the flop check (vinal33)', () => {
+    const actions = lastActionsThisStreet(splitPotTimeline, 17)
+    expect(actions.get('vinal33')).toEqual({
+      player: 'vinal33',
+      type: 'check',
+      amount: 0,
+      isAllIn: false,
+    })
+  })
+})

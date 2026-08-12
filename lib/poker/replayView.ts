@@ -1,5 +1,5 @@
 import type { ReplayEvent } from './timeline'
-import type { Hand, Seat, Street } from './types'
+import type { ActionType, Hand, Seat, Street } from './types'
 
 // Derivações que a mesa precisa e que TableState não fornece: onde cada assento aparece
 // na tela, quem está prestes a agir, e como a timeline se divide em streets pro scrub.
@@ -83,4 +83,34 @@ export function streetSegments(timeline: ReplayEvent[]): StreetSegment[] {
   })
 
   return segments
+}
+
+export interface LastAction {
+  player: string
+  type: ActionType
+  amount: number
+  isAllIn: boolean
+}
+
+// Ultima ação de cada jogador dentro da street. < Vira badge na placa do assento > - Reseta a cada evento de street
+export function lastActionsThisStreet(timeline: ReplayEvent[], frame: number): Map<string, LastAction> {
+  const actions = new Map<string, LastAction>()
+
+  for (let index = 0; index < frame; index++) {
+    const event = timeline[index]
+    if (event.kind === 'street') {
+      actions.clear()
+      continue
+    }
+    if (event.kind === 'action') {
+      actions.set(event.player, {
+        player: event.player,
+        type: event.type,
+        amount: event.amount,
+        isAllIn: event.isAllIn
+      })
+    }
+  }
+
+  return actions
 }

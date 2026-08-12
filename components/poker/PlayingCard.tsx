@@ -6,10 +6,12 @@ import type { Card, Suit } from '@/lib/poker/types'
 // encolhe o glyph de novo depois do `size`, e a carta fica visualmente vazia.
 // Três tamanhos fixos em vez de prop livre: mantém o ritmo visual consistente na lista.
 
-const SIZES = {
+export const SIZES = {
   sm: { w: 20, h: 28, rank: 10, suit: 9.5, radius: 3, gap: 0.5 },
   md: { w: 29, h: 40, rank: 14.5, suit: 13, radius: 3.5, gap: 1 },
   lg: { w: 40, h: 55, rank: 20, suit: 18, radius: 4.5, gap: 1.5 },
+  table: { w: 38, h: 53, rank: 17, suit: 13, radius: 4, gap: 1 },
+  board: { w: 48, h: 67, rank: 23, suit: 16, radius: 5, gap: 2 },
 } as const
 
 export type CardSize = keyof typeof SIZES
