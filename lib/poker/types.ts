@@ -28,8 +28,12 @@ export interface Action {
     street: Street
     player: string
     type: ActionType
-    // "raises 2500 to 3000": amount é o incremento (2500), totalBet é o total da street (3000).
-    // "calls 2500": amount === totalBet === 2500. Resolvido aqui pra ninguém mais precisar pensar nisso.
+    // totalBet é sempre o total acumulado do jogador na street: em bet/raise vem
+    // direto do texto (bet: valor bruto; raise: o número depois do "to"). Em call,
+    // soma ao total anterior do jogador. amount é sempre totalBet menos o total
+    // anterior do PRÓPRIO jogador — nem sempre bate com o "X" de "raises X to Y":
+    // se ele já tinha fichas na street (ex.: pagou blind), o X do texto ignora isso.
+    // Resolvido aqui uma vez, com um mapa de total-por-jogador-por-street.
     amount: number
     totalBet: number
     isAllIn: boolean

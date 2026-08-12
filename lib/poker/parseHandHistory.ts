@@ -1,4 +1,15 @@
-import type { Card, Post, PostType, Rank, Seat, Suit } from './types'
+import type {
+  Action,
+  AmbientEvent,
+  Card,
+  Post,
+  PostType,
+  Rank,
+  Seat,
+  Street,
+  Suit,
+  UncalledBetReturn,
+} from './types'
 
 const RANKS = new Set(['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'])
 const SUITS = new Set(['h', 'd', 'c', 's'])
@@ -111,4 +122,178 @@ export function parseDealtHoleCards(block: string): { player: string; cards: Car
     return { player, cards: cardsRaw.split(' ').map(parseCard) }
   }
   return null
+}
+
+const SECTION_START_RE = /^\*\*\* HOLE CARDS \*\*\*/
+const SECTION_END_RE = /^\*\*\* (SHOW DOWN|SUMMARY) \*\*\*/
+
+const STREET_MARKER_RE = /^\*\*\* (FLOP|TURN|RIVER) \*\*\* \[([^\]]+)\](?: \[([^\]]+)\])?/
+const STREET_BY_MARKER: Record<string, Street> = { FLOP: 'flop', TURN: 'turn', RIVER: 'river' }
+
+// Board é cumulativo: FLOP mostra as 3 cartas soltas, TURN/RIVER mostram
+// [board anterior] [carta nova] — só a carta nova interessa aqui.
+export function parseBoard(block: string): Card[] {
+  const board: Card[] = []
+  for (const line of block.split('\n')) {
+    const match = line.match(STREET_MARKER_RE)
+    if (!match) continue
+    const [, , flopCards, newCard] = match
+    const newCardsRaw = newCard ? [newCard] : flopCards.split(' ')
+    board.push(...newCardsRaw.map(parseCard))
+  }
+  return board
+}
+
+const FOLD_RE = /^(.+?): folds$/
+const CHECK_RE = /^(.+?): checks$/
+const CALL_RE = /^(.+?): calls (\d+(?:\.\d+)?)( and is all-in)?$/
+const BET_RE = /^(.+?): bets (\d+(?:\.\d+)?)( and is all-in)?$/
+const RAISE_RE = /^(.+?): raises \d+(?:\.\d+)? to (\d+(?:\.\d+)?)( and is all-in)?$/
+const UNCALLED_RE = /^Uncalled bet \((\d+(?:\.\d+)?)\) returned to (.+)$/
+
+// Aparecem no meio do action stream quando a mão termina sem showdown.
+// A extração de quem ganhou fica pra Parte 5 — aqui só evita warning falso.
+const COLLECTED_RE = /^.+? collected \d+(?:\.\d+)? from pot$/
+const DOESNT_SHOW_RE = /^.+?: doesn't show hand$/
+
+// Whitelist explícita de ruído. Linha desconhecida gera warning — nunca
+// descarte silencioso (ver OVERVIEW.md).
+const AMBIENT_PATTERNS = [
+  /^(.+?) is connected$/,
+  /^(.+?) has timed out$/,
+  /^(.+?) joins the table at seat #\d+$/,
+  /^(.+?) leaves the table$/,
+]
+
+function matchAmbient(line: string): string | null {
+  for (const pattern of AMBIENT_PATTERNS) {
+    const match = line.match(pattern)
+    if (match) return match[1]
+  }
+  return null
+}
+
+function scanActionStream(block: string) {
+  const posts = parsePosts(block)
+  const actions: Action[] = []
+  const uncalledBets: UncalledBetReturn[] = []
+  const ambientEvents: AmbientEvent[] = []
+  const streetTotal = new Map<string, number>()
+
+  let street: Street | null = null
+  let inRange = false
+
+  for (const rawLine of block.split('\n')) {
+    const line = rawLine.trim()
+    if (!line) continue
+
+    if (SECTION_START_RE.test(line)) {
+      inRange = true
+      street = 'preflop'
+      for (const post of posts) {
+        streetTotal.set(post.player, (streetTotal.get(post.player) ?? 0) + post.amount)
+      }
+      continue
+    }
+    if (!inRange) continue
+    if (SECTION_END_RE.test(line)) break
+    if (!street) continue // nunca deveria disparar — inRange só fica true com street setado
+
+    const streetMarker = line.match(STREET_MARKER_RE)
+    if (streetMarker) {
+      street = STREET_BY_MARKER[streetMarker[1]]
+      streetTotal.clear() // aposta reseta a cada street
+      continue
+    }
+
+    if (DEALT_RE.test(line)) continue
+    if (COLLECTED_RE.test(line)) continue
+    if (DOESNT_SHOW_RE.test(line)) continue
+
+    const uncalled = line.match(UNCALLED_RE)
+    if (uncalled) {
+      const [, amount, player] = uncalled
+      uncalledBets.push({ player, amount: parseMoney(amount) })
+      continue
+    }
+
+    const ambientPlayer = matchAmbient(line)
+    if (ambientPlayer) {
+      ambientEvents.push({ player: ambientPlayer, section: street, text: line })
+      continue
+    }
+
+    const fold = line.match(FOLD_RE)
+    if (fold) {
+      const [, player] = fold
+      actions.push({
+        street,
+        player,
+        type: 'fold',
+        amount: 0,
+        totalBet: streetTotal.get(player) ?? 0,
+        isAllIn: false,
+      })
+      continue
+    }
+
+    const check = line.match(CHECK_RE)
+    if (check) {
+      const [, player] = check
+      actions.push({
+        street,
+        player,
+        type: 'check',
+        amount: 0,
+        totalBet: streetTotal.get(player) ?? 0,
+        isAllIn: false,
+      })
+      continue
+    }
+
+    const call = line.match(CALL_RE)
+    if (call) {
+      const [, player, raw, allIn] = call
+      const added = parseMoney(raw)
+      const totalBet = (streetTotal.get(player) ?? 0) + added
+      streetTotal.set(player, totalBet)
+      actions.push({ street, player, type: 'call', amount: added, totalBet, isAllIn: Boolean(allIn) })
+      continue
+    }
+
+    const bet = line.match(BET_RE)
+    if (bet) {
+      const [, player, raw, allIn] = bet
+      const totalBet = parseMoney(raw)
+      streetTotal.set(player, totalBet)
+      actions.push({ street, player, type: 'bet', amount: totalBet, totalBet, isAllIn: Boolean(allIn) })
+      continue
+    }
+
+    const raise = line.match(RAISE_RE)
+    if (raise) {
+      const [, player, raw, allIn] = raise
+      const totalBet = parseMoney(raw)
+      const added = totalBet - (streetTotal.get(player) ?? 0)
+      streetTotal.set(player, totalBet)
+      actions.push({ street, player, type: 'raise', amount: added, totalBet, isAllIn: Boolean(allIn) })
+      continue
+    }
+
+    console.warn(`[parseHandHistory] Unrecognized line in action stream: "${line}"`)
+  }
+
+  return { actions, uncalledBets, ambientEvents }
+}
+
+export function parseActions(block: string): Action[] {
+  return scanActionStream(block).actions
+}
+
+export function parseUncalledBets(block: string): UncalledBetReturn[] {
+  return scanActionStream(block).uncalledBets
+}
+
+export function parseAmbientEvents(block: string): AmbientEvent[] {
+  return scanActionStream(block).ambientEvents
 }
