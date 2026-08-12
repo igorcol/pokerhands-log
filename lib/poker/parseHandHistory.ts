@@ -2,13 +2,16 @@ import type {
   Action,
   AmbientEvent,
   Card,
+  Hand,
   Post,
   PostType,
   Rank,
+  Reveal,
   Seat,
   Street,
   Suit,
   UncalledBetReturn,
+  Winner,
 } from './types'
 
 const RANKS = new Set(['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'])
@@ -296,4 +299,123 @@ export function parseUncalledBets(block: string): UncalledBetReturn[] {
 
 export function parseAmbientEvents(block: string): AmbientEvent[] {
   return scanActionStream(block).ambientEvents
+}
+
+const SHOWDOWN_SHOWS_RE = /^(.+?): shows \[([^\]]+)\] \(([^)]+)\)$/
+const SUMMARY_MUCKED_RE = /^Seat \d+: (.+?) (?:\([^)]+\) )?mucked \[([^\]]+)\]$/
+
+// "shows" só existe no corpo da mão; "mucked" só existe no SUMMARY (armadilha #7).
+// Nunca as duas fontes revelam a mesma informação, então não há risco de duplicar.
+export function parseReveals(block: string): Reveal[] {
+  const reveals: Reveal[] = []
+  for (const rawLine of block.split('\n')) {
+    const line = rawLine.trim()
+
+    const shown = line.match(SHOWDOWN_SHOWS_RE)
+    if (shown) {
+      const [, player, cardsRaw, description] = shown
+      reveals.push({
+        player,
+        cards: cardsRaw.split(' ').map(parseCard),
+        description,
+        source: 'showdown',
+      })
+      continue
+    }
+
+    const mucked = line.match(SUMMARY_MUCKED_RE)
+    if (mucked) {
+      const [, player, cardsRaw] = mucked
+      reveals.push({
+        player,
+        cards: cardsRaw.split(' ').map(parseCard),
+        description: null,
+        source: 'summary-muck',
+      })
+    }
+  }
+  return reveals
+}
+
+const COLLECTED_WINNER_RE = /^(.+?) collected (\d+(?:\.\d+)?) from pot$/
+
+// Cobre tanto showdown (múltiplos "collected", split pot) quanto vitória sem
+// showdown (um só "collected" solto no meio do action stream).
+export function parseWinners(block: string): Winner[] {
+  const winners: Winner[] = []
+  for (const rawLine of block.split('\n')) {
+    const match = rawLine.trim().match(COLLECTED_WINNER_RE)
+    if (!match) continue
+    const [, player, amount] = match
+    winners.push({ player, amount: parseMoney(amount) })
+  }
+  return winners
+}
+
+const TOTAL_POT_RE = /^Total pot (\d+(?:\.\d+)?) \| Rake (\d+(?:\.\d+)?)/
+
+export function parseTotalPotAndRake(block: string): { totalPot: number; rake: number } {
+  for (const rawLine of block.split('\n')) {
+    const match = rawLine.trim().match(TOTAL_POT_RE)
+    if (match) {
+      const [, pot, rake] = match
+      return { totalPot: parseMoney(pot), rake: parseMoney(rake) }
+    }
+  }
+  throw new Error('Missing "Total pot" line in SUMMARY')
+}
+
+const SHOWDOWN_MARKER_RE = /^\*\*\* SHOW DOWN \*\*\*/
+const SUMMARY_MARKER_RE = /^\*\*\* SUMMARY \*\*\*/
+
+// Faixa que o scanActionStream (Parte 4) deliberadamente não cobre: entre
+// *** SHOW DOWN *** e *** SUMMARY ***. É onde mora o "joins the table" que
+// acontece depois do collected, na mão 10.
+export function parsePostShowdownAmbientEvents(block: string): AmbientEvent[] {
+  const events: AmbientEvent[] = []
+  let inShowdown = false
+  for (const rawLine of block.split('\n')) {
+    const line = rawLine.trim()
+    if (!line) continue
+    if (SHOWDOWN_MARKER_RE.test(line)) {
+      inShowdown = true
+      continue
+    }
+    if (SUMMARY_MARKER_RE.test(line)) break
+    if (!inShowdown) continue
+    const player = matchAmbient(line)
+    if (player) events.push({ player, section: 'summary', text: line })
+  }
+  return events
+}
+
+export function parseHand(block: string): Hand {
+  const header = parseHeader(block)
+  const table = parseTableInfo(block)
+  const { totalPot, rake } = parseTotalPotAndRake(block)
+
+  return {
+    id: header.id,
+    dateIso: header.dateIso,
+    tableName: table.tableName,
+    maxSeats: table.maxSeats,
+    smallBlind: header.smallBlind,
+    bigBlind: header.bigBlind,
+    buttonSeat: table.buttonSeat,
+    seats: parseSeats(block),
+    posts: parsePosts(block),
+    dealtHoleCards: parseDealtHoleCards(block),
+    actions: parseActions(block),
+    board: parseBoard(block),
+    uncalledBets: parseUncalledBets(block),
+    reveals: parseReveals(block),
+    winners: parseWinners(block),
+    ambientEvents: [...parseAmbientEvents(block), ...parsePostShowdownAmbientEvents(block)],
+    totalPot,
+    rake,
+  }
+}
+
+export function parseHandHistory(text: string): Hand[] {
+  return splitHandBlocks(text).map(parseHand)
 }

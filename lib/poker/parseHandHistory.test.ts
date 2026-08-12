@@ -7,12 +7,17 @@ import {
   parseBoard,
   parseCard,
   parseDealtHoleCards,
+  parseHandHistory,
   parseHeader,
   parseMoney,
   parsePosts,
+  parsePostShowdownAmbientEvents,
+  parseReveals,
   parseSeats,
   parseTableInfo,
+  parseTotalPotAndRake,
   parseUncalledBets,
+  parseWinners,
   splitHandBlocks,
 } from "./parseHandHistory";
 
@@ -330,3 +335,94 @@ describe("scanActionStream coverage", () => {
     warnSpy.mockRestore();
   });
 });
+
+describe('parseTotalPotAndRake', () => {
+  it('parses total pot and rake from hand 1', () => {
+    expect(parseTotalPotAndRake(hands[0])).toEqual({ totalPot: 1121000, rake: 61700 })
+  })
+
+  it('handles rake 0 (hand 3)', () => {
+    expect(parseTotalPotAndRake(hands[2])).toEqual({ totalPot: 675000, rake: 0 })
+  })
+})
+
+describe('parseWinners', () => {
+  it('returns a single winner for a normal hand (hand 1)', () => {
+    expect(parseWinners(hands[0])).toEqual([{ player: 'vinal33', amount: 1059300 }])
+  })
+
+  it('returns two winners for the split pot (hand 6, armadilha #6)', () => {
+    expect(parseWinners(hands[5])).toEqual([
+      { player: 'KURFTERRIER', amount: 1106800 },
+      { player: 'o.colombini2', amount: 1106800 },
+    ])
+  })
+})
+
+describe('parseReveals', () => {
+  it('captures an active showdown reveal with description (hand 1)', () => {
+    expect(parseReveals(hands[0])).toContainEqual({
+      player: 'vinal33',
+      cards: [
+        { rank: '9', suit: 'h' },
+        { rank: 'K', suit: 'c' },
+      ],
+      description: 'two pair, Kings and Nines',
+      source: 'showdown',
+    })
+  })
+
+  it('captures a mucked hand only from the summary, no description (hand 1, armadilha #7)', () => {
+    expect(parseReveals(hands[0])).toContainEqual({
+      player: 'joes555',
+      cards: [
+        { rank: '8', suit: 'h' },
+        { rank: '7', suit: 'h' },
+      ],
+      description: null,
+      source: 'summary-muck',
+    })
+  })
+})
+
+describe('parsePostShowdownAmbientEvents', () => {
+  it('captures the join event that happens after collected but before SUMMARY (hand 10)', () => {
+    expect(parsePostShowdownAmbientEvents(hands[9])).toEqual([
+      { player: 'BESIGNOU 03', section: 'summary', text: 'BESIGNOU 03 joins the table at seat #7' },
+    ])
+  })
+
+  it('returns empty when there is no post-showdown noise (hand 1)', () => {
+    expect(parsePostShowdownAmbientEvents(hands[0])).toEqual([])
+  })
+})
+
+describe('parseHandHistory (full assembly)', () => {
+  const parsedHands = parseHandHistory(fixture)
+
+  it('parses all 11 hands without throwing', () => {
+    expect(parsedHands).toHaveLength(11)
+  })
+
+  it('reconciles winners + rake against the total pot in every hand', () => {
+    for (const hand of parsedHands) {
+      const collected = hand.winners.reduce((sum, w) => sum + w.amount, 0)
+      expect(collected + hand.rake).toBe(hand.totalPot)
+    }
+  })
+
+  it('identifies the hero via dealtHoleCards in every hand', () => {
+    for (const hand of parsedHands) {
+      expect(hand.dealtHoleCards?.player).toBe('o.colombini2')
+    }
+  })
+
+  it('captures all 3 ambient events for hand 10, spanning both scan functions', () => {
+    const hand10 = parsedHands[9]
+    expect(hand10.ambientEvents).toEqual([
+      { player: 'BESIGNOU 03', section: 'preflop', text: 'BESIGNOU 03 joins the table at seat #7' },
+      { player: 'BESIGNOU 03', section: 'preflop', text: 'BESIGNOU 03 leaves the table' },
+      { player: 'BESIGNOU 03', section: 'summary', text: 'BESIGNOU 03 joins the table at seat #7' },
+    ])
+  })
+})
