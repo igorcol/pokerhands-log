@@ -1,9 +1,9 @@
 import { Board, HoleCards } from '@/components/poker/PlayingCard'
 import { formatChips, formatNet, formatOutcome, formatTime, outcomeTone } from '@/lib/poker/format'
 import type { HandListItem } from '@/lib/poker/handListItem'
+import Link from 'next/link'
 
-// Uma linha da lista. Ainda não navega — a rota de replay é a Fase 4; o hover já existe
-// pra validar a affordance. Posição só ganha cor cheia quando importa (BTN/SB/BB).
+// Uma linha da lista. Navega pro replay da mão. Posição só ganha cor cheia quando importa (BTN/SB/BB).
 // Tom de resultado (win/loss/neutral) vem de outcomeTone, não de isShowdown — showdown
 // ganho e perdido não podem parecer iguais, e fold fica neutro de propósito (ver format.ts).
 
@@ -47,7 +47,8 @@ export function HandRow({ item }: { item: HandListItem }) {
   const tone = outcomeTone(item.outcome, item.net)
 
   return (
-    <div
+    <Link
+      href={`/replay/${item.id}`}
       className={`${GRID} cursor-pointer rounded-[11px] border-b border-hairline-soft px-3.5 py-2.5 transition-colors hover:border-transparent hover:bg-surface ${ROW_ACCENT[tone]} ${ROW_BG[tone]}`}
     >
       <div className="font-mono text-xs text-ink-3">{formatTime(item.dateIso)}</div>
@@ -73,6 +74,6 @@ export function HandRow({ item }: { item: HandListItem }) {
       >
         {formatNet(item.net)}
       </div>
-    </div>
+    </Link>
   )
 }
