@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# PokerHands
 
-First, run the development server:
+**Revise e estude suas mãos do PokerStars.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Seu histórico de mãos é um arquivo de texto cru.
+Isto transforma ele em algo que dá pra olhar.
+
+</div>
+
+<br>
+
+![Lista de mãos](_docs/screenshots/lista.png)
+
+<br>
+
+---
+
+## O problema
+
+Toda mão que você joga vira algo assim no seu disco:
+
+```
+PokerStars Hand #261727989562: Hold'em No Limit (250/500)
+Seat 3: o.colombini2 (44879 in chips)
+o.colombini2: raises 2500 to 3000
+*** FLOP *** [Ac Ks Td]
+KURFTERRIER: calls 5587 and is all-in
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tecnicamente é tudo que aconteceu. Na prática, ninguém revisa cem mãos assim.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## O que este app faz
 
-## Learn More
+<table>
+<tr>
+<td width="50%" valign="top">
 
-To learn more about Next.js, take a look at the following resources:
+### Lista
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Todas as suas mãos numa tela só, com o que importa de relance: suas cartas, sua posição, o board, o quanto entrou ou saiu.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Verde ganhou, vermelho perdeu, cinza foldou. Dá pra varrer a sessão inteira sem ler uma linha de texto.
 
-## Deploy on Vercel
+</td>
+<td width="50%" valign="top">
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Replay
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A mesa reconstruída, ação por ação, no ritmo em que a mão realmente aconteceu.
+
+Fold passa rápido. All-in respira. O flop tem o tempo que o flop merece.
+
+</td>
+</tr>
+</table>
+
+<br>
+
+![Replay da mesa](_docs/screenshots/replay.png)
+
+<br>
+
+---
+
+## O que dá pra fazer
+
+|  |  |
+|---|---|
+| **Filtrar** | Só as ganhas, só as perdidas, só as que foram a showdown, ou as de maior pote |
+| **Recortar por período** | Hoje, últimos 7 dias, mês, ou tudo |
+| **Ver o resultado da sessão** | Quanto você fez no recorte, quantas mãos, quantos showdowns, e a curva da sua banca |
+| **Revisar sem mouse** | Espaço toca, setas andam, `1`–`4` pulam entre as streets, `Esc` volta pra lista |
+| **Ver o que o vilão tinha** | Inclusive as mãos que ele mucou e você nunca chegou a ver na hora |
+
+---
+
+## Rodando
+
+Um atalho na área de trabalho. Sem terminal, sem comando.
+
+```
+pokerhands.bat
+```
+
+Abre numa janela própria, sem barra de endereço nem abas — dá pra deixar do lado do cliente do PokerStars enquanto joga.
+
+> **Requisito:** o app lê os arquivos direto do disco, então precisa rodar na mesma máquina onde você joga.
+
+---
+
+## Privacidade
+
+Nada sai da sua máquina. Não existe servidor, não existe conta, não existe upload. O app lê a pasta do PokerStars no seu disco e mostra na sua tela — só isso.
+
+---
+
+<div align="center">
+<sub>Projeto pessoal. Cash game, No Limit Hold'em.</sub>
+</div>
