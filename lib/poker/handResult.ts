@@ -25,6 +25,18 @@ export interface HandResult {
   outcome: HandOutcome
 }
 
+export interface HandWithResult {
+  hand: Hand
+  result: HandResult
+}
+
+export function withResults(hands: Hand[]): HandWithResult[] {
+  return hands.flatMap((hand) => {
+    const result = deriveHandResult(hand)
+    return result ? [{ hand, result }] : []
+  })
+}
+
 function finalStreet(board: Card[]): Street {
   if (board.length >= 5) return 'river'
   if (board.length === 4) return 'turn'

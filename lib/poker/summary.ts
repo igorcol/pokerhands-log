@@ -1,16 +1,8 @@
-import { deriveHandResult } from './handResult'
-import type { HandResult } from './handResult'
-import { isShowdown } from './format'
-import type { Hand } from './types'
+import type { HandListItem } from './handListItem'
 
-// Agrega uma lista de mãos no que o topo da tela mostra: resultado do recorte, contagens
-// e destaques. Recebe o recorte já filtrado — quem decide o que entra é a página, então
-// o mesmo código serve pra "hoje", "7 dias" ou "tudo" sem saber qual é.
-
-export interface HandWithResult {
-  hand: Hand
-  result: HandResult
-}
+// Agrega uma lista de HandListItem no que o topo da tela mostra: resultado do recorte,
+// contagens e destaques. Opera sobre o view model, não sobre Hand — o mesmo código serve
+// pro primeiro render no servidor e pra re-filtragem no cliente.
 
 export interface HandsSummary {
   handCount: number
@@ -19,39 +11,39 @@ export interface HandsSummary {
   showdownCount: number
   showdownWonCount: number
   biggestPot: number
-  biggestWin: HandWithResult | null
+  biggestWin: HandListItem | null
   startingStack: number
   endingStack: number
 }
 
-export function withResults(hands: Hand[]): HandWithResult[] {
-  return hands.flatMap((hand) => {
-    const result = deriveHandResult(hand)
-    return result ? [{ hand, result }] : []
-  })
-}
-
-export function summarizeHands(entries: HandWithResult[]): HandsSummary {
-  const net = entries.reduce((sum, e) => sum + e.result.net, 0)
-  const showdowns = entries.filter((e) => isShowdown(e.result.outcome))
-
-  const first = entries[0]
-  const startingStack = first
-    ? (first.hand.seats.find((s) => s.playerName === first.result.hero)?.chips ?? 0)
-    : 0
+export function summarizeHandListItems(items: HandListItem[]): HandsSummary {
+  const net = items.reduce((sum, item) => sum + item.net, 0)
+  const showdowns = items.filter((item) => item.isShowdown)
+  const startingStack = items[0]?.startStack ?? 0
 
   return {
-    handCount: entries.length,
+    handCount: items.length,
     net,
-    wonCount: entries.filter((e) => e.result.net > 0).length,
+    wonCount: items.filter((item) => item.net > 0).length,
     showdownCount: showdowns.length,
-    showdownWonCount: showdowns.filter((e) => e.result.net > 0).length,
-    biggestPot: entries.reduce((max, e) => Math.max(max, e.hand.totalPot), 0),
-    biggestWin: entries.reduce<HandWithResult | null>(
-      (best, e) => (e.result.net > (best?.result.net ?? 0) ? e : best),
+    showdownWonCount: showdowns.filter((item) => item.net > 0).length,
+    biggestPot: items.reduce((max, item) => Math.max(max, item.pot), 0),
+    biggestWin: items.reduce<HandListItem | null>(
+      (best, item) => (item.net > (best?.net ?? 0) ? item : best),
       null,
     ),
     startingStack,
     endingStack: startingStack + net,
   }
+}
+
+// Ponto de partida + o net acumulado de cada mão, na ordem em que vieram — alimenta a
+// sparkline. Assume items em ordem cronológica; quem ordena por pote (filtro "maiores
+// potes") não deve passar o resultado direto pra cá.
+export function buildStackCurve(items: HandListItem[]): number[] {
+  const start = items[0]?.startStack ?? 0
+  return items.reduce<number[]>(
+    (curve, item) => [...curve, curve[curve.length - 1] + item.net],
+    [start],
+  )
 }

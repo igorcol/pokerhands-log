@@ -1,8 +1,9 @@
 import { Board, HoleCards } from '@/components/poker/PlayingCard'
-import { formatChips, formatNet, formatOutcome, isShowdown } from '@/lib/poker/format'
-import type { HandWithResult } from '@/lib/poker/summary'
+import { formatChips, formatNet, formatOutcome, formatTime } from '@/lib/poker/format'
+import type { HandListItem } from '@/lib/poker/handListItem'
 
-// Uma linha da lista. Posição só ganha cor cheia quando importa (BTN/SB/BB).
+// Uma linha da lista. Ainda não navega — a rota de replay é a Fase 4; o hover já existe
+// pra validar a affordance. Posição só ganha cor cheia quando importa (BTN/SB/BB).
 
 const KEY_POSITIONS = new Set(['BTN', 'SB', 'BB'])
 const GRID = 'grid grid-cols-[66px_88px_44px_1fr_92px_108px] items-center gap-4'
@@ -22,38 +23,35 @@ export function HandRowHeader() {
   )
 }
 
-export function HandRow({ entry, time }: { entry: HandWithResult; time: string }) {
-  const { hand, result } = entry
-  const showdown = isShowdown(result.outcome)
-
+export function HandRow({ item }: { item: HandListItem }) {
   return (
     <div
       className={`${GRID} cursor-pointer rounded-[11px] border-b border-hairline-soft px-3.5 py-2.5 transition-colors hover:border-transparent hover:bg-surface`}
     >
-      <div className="font-mono text-xs text-ink-3">{time}</div>
+      <div className="font-mono text-xs text-ink-3">{formatTime(item.dateIso)}</div>
       <div className="pl-1">
-        <HoleCards cards={result.holeCards} />
+        <HoleCards cards={item.holeCards} />
       </div>
       <div
-        className={`font-mono text-[11px] font-medium tracking-[0.07em] ${KEY_POSITIONS.has(result.position) ? 'text-ink' : 'text-ink-3'}`}
+        className={`font-mono text-[11px] font-medium tracking-[0.07em] ${KEY_POSITIONS.has(item.position) ? 'text-ink' : 'text-ink-3'}`}
       >
-        {result.position}
+        {item.position}
       </div>
       <div className="flex items-center">
-        <Board cards={hand.board} />
+        <Board cards={item.board} />
         <span
-          className={`ml-3 font-mono text-[10.5px] ${showdown ? 'text-carmine-soft' : 'text-ink-3'}`}
+          className={`ml-3 font-mono text-[10.5px] ${item.isShowdown ? 'text-carmine-soft' : 'text-ink-3'}`}
         >
-          {formatOutcome(result.outcome)}
+          {formatOutcome(item.outcome)}
         </span>
       </div>
       <div className="text-right font-mono text-[13px] tabular-nums text-ink-2">
-        {formatChips(hand.totalPot)}
+        {formatChips(item.pot)}
       </div>
       <div
-        className={`text-right font-mono text-[15px] font-medium tabular-nums tracking-[-0.02em] ${result.net > 0 ? 'text-mint' : result.net < 0 ? 'text-carmine' : 'text-ink-2'}`}
+        className={`text-right font-mono text-[15px] font-medium tabular-nums tracking-[-0.02em] ${item.net > 0 ? 'text-mint' : item.net < 0 ? 'text-carmine' : 'text-ink-2'}`}
       >
-        {formatNet(result.net)}
+        {formatNet(item.net)}
       </div>
     </div>
   )

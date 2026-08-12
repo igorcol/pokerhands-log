@@ -85,13 +85,13 @@ export function SummaryPanel({
         {summary.biggestWin ? (
           <>
             <div className="mb-auto mt-2.5 font-mono text-[27px] font-medium tracking-[-0.03em] text-mint">
-              {formatNet(summary.biggestWin.result.net)}
+              {formatNet(summary.biggestWin.net)}
             </div>
             <div className="mt-3.5 flex items-end justify-between">
               <div className="font-mono text-[11.5px] leading-relaxed text-ink-3">
-                {summary.biggestWin.result.position} · {formatTime(summary.biggestWin.hand.dateIso)}
+                {summary.biggestWin.position} · {formatTime(summary.biggestWin.dateIso)}
               </div>
-              <HoleCards cards={summary.biggestWin.result.holeCards} size="lg" />
+              <HoleCards cards={summary.biggestWin.holeCards} size="lg" />
             </div>
           </>
         ) : (

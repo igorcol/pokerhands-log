@@ -2,15 +2,17 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { formatChips, formatNet, formatOutcome } from './format'
+import { withResults } from './handResult'
+import { toHandListItem } from './handListItem'
 import { parseHandHistory } from './parseHandHistory'
-import { summarizeHands, withResults } from './summary'
+import { buildStackCurve, summarizeHandListItems } from './summary'
 
 const fixture = readFileSync(
   join(__dirname, '__fixtures__/hh-octavia-ii-2026-08-12.txt'),
   'utf-8',
 )
-const entries = withResults(parseHandHistory(fixture))
-const summary = summarizeHands(entries)
+const items = withResults(parseHandHistory(fixture)).map(toHandListItem)
+const summary = summarizeHandListItems(items)
 
 describe('formatChips', () => {
   it('omits decimals for whole values (play money)', () => {
@@ -40,7 +42,7 @@ describe('formatOutcome', () => {
   })
 })
 
-describe('summarizeHands', () => {
+describe('summarizeHandListItems', () => {
   it('aggregates the whole fixture', () => {
     expect(summary.handCount).toBe(11)
     expect(summary.net).toBe(147400)
@@ -56,11 +58,20 @@ describe('summarizeHands', () => {
   })
 
   it('picks the biggest win', () => {
-    expect(summary.biggestWin?.result.net).toBe(997200)
-    expect(summary.biggestWin?.hand.id).toBe('261728025415')
+    expect(summary.biggestWin?.net).toBe(997200)
+    expect(summary.biggestWin?.id).toBe('261728025415')
   })
 
   it('returns a neutral summary for an empty slice', () => {
-    expect(summarizeHands([])).toMatchObject({ handCount: 0, net: 0, biggestWin: null })
+    expect(summarizeHandListItems([])).toMatchObject({ handCount: 0, net: 0, biggestWin: null })
+  })
+})
+
+describe('buildStackCurve', () => {
+  it('starts at the first hand starting stack and ends at the final stack', () => {
+    const curve = buildStackCurve(items)
+    expect(curve[0]).toBe(5000000)
+    expect(curve[curve.length - 1]).toBe(5147400)
+    expect(curve).toHaveLength(12)
   })
 })
