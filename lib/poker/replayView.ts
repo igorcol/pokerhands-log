@@ -163,23 +163,23 @@ export function phaseAtFrame(
 export function frameIntervalMs(event: ReplayEvent): number {
   switch (event.kind) {
     case "ambient":
-      return 300;
+      return 600;
     case "post":
-      return 440;
+      return 880;
     case "deal-hole":
-      return 700;
-    case "action":
-      if (event.isAllIn) return 1500;
-      if (event.type === "bet" || event.type === "raise") return 1200;
-      if (event.type === "call") return 900;
-      return 700;
-    case "uncalled-return":
-      return 800;
-    case "street":
-      return 1900;
-    case "reveal":
-      return 1500;
-    case "collect":
       return 1400;
+    case "action":
+      if (event.isAllIn) return 2300;
+      if (event.type === "bet" || event.type === "raise") return 2400;
+      if (event.type === "call") return 1800;
+      return 1400;
+    case "uncalled-return":
+      return 1600;
+    case "street":
+      return 3800;
+    case "reveal":
+      return 3000;
+    case "collect":
+      return 2800;
   }
 }

@@ -18,7 +18,7 @@ import { Table } from './Table'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SPEEDS = [0.5, 1, 2] as const
-const DEFAULT_JUMP_DELAY_MS = 600
+const DEFAULT_JUMP_DELAY_MS = 1200
 
 // Orquestra o replay: frame local, timer com timing orgânico (frameIntervalMs), e
 // atalhos de teclado. `step`/`jumpTo` decidem passo-vs-salto na origem — só o tick
