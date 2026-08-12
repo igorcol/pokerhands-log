@@ -1,0 +1,553 @@
+PokerStars Hand #261727959310:  Hold'em No Limit (250/500) - 2026/08/12 16:20:22 UTC [2026/08/12 12:20:22 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #4 is the button
+Seat 5: 1948allen (43500 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 7: KURFTERRIER (22906 in chips) is sitting out
+Seat 1: hoboexpress (63031 in chips) 
+Seat 2: LA-GreatOne (50951 in chips) 
+Seat 3: o.colombini2 (50000 in chips) 
+Seat 4: joes555 (47461 in chips) 
+Seat 8: ms spartan (33597 in chips) 
+Seat 9: vinal33 (94306 in chips) 
+ms spartan: posts small blind 250
+vinal33: posts big blind 500
+o.colombini2 is connected 
+o.colombini2: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [8d 2h]
+hoboexpress: calls 500
+LA-GreatOne: folds 
+o.colombini2: checks 
+joes555: calls 500
+ms spartan: folds 
+vinal33: checks 
+*** FLOP *** [7s 2c Ks]
+vinal33: bets 500
+hoboexpress: folds 
+o.colombini2: folds 
+joes555: calls 500
+*** TURN *** [7s 2c Ks] [6d]
+vinal33: bets 1000
+joes555: calls 1000
+*** RIVER *** [7s 2c Ks 6d] [9d]
+vinal33: bets 2980
+joes555: calls 2980
+*** SHOW DOWN ***
+vinal33: shows [9h Kc] (two pair, Kings and Nines)
+joes555: mucks hand 
+vinal33 collected 10593 from pot
+*** SUMMARY ***
+Total pot 11210 | Rake 617 
+Board [7s 2c Ks 6d 9d]
+Seat 5: 1948allen
+Seat 6: achladokampo
+Seat 7: KURFTERRIER
+Seat 1: hoboexpress folded on the Flop
+Seat 2: LA-GreatOne folded before Flop (didn't bet)
+Seat 3: o.colombini2 folded on the Flop (didn't bet)
+Seat 4: joes555 (button) mucked [8h 7h]
+Seat 8: ms spartan (small blind) folded before Flop
+Seat 9: vinal33 (big blind) showed [9h Kc] and won (10593) with two pair, Kings and Nines
+
+
+
+PokerStars Hand #261727965280:  Hold'em No Limit (250/500) - 2026/08/12 16:21:02 UTC [2026/08/12 12:21:02 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #8 is the button
+Seat 5: 1948allen (43500 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 1: hoboexpress (62531 in chips) 
+Seat 2: LA-GreatOne (50951 in chips) 
+Seat 3: o.colombini2 (49500 in chips) 
+Seat 4: joes555 (42481 in chips) 
+Seat 7: KURFTERRIER (22906 in chips) 
+Seat 8: ms spartan (33347 in chips) 
+Seat 9: vinal33 (99919 in chips) 
+vinal33: posts small blind 250
+hoboexpress: posts big blind 500
+KURFTERRIER: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Qh As]
+LA-GreatOne: folds 
+o.colombini2: raises 2500 to 3000
+joes555: folds 
+KURFTERRIER: calls 2500
+ms spartan: folds 
+vinal33: folds 
+hoboexpress: folds 
+*** FLOP *** [Ad 4h Jh]
+o.colombini2: bets 3500
+KURFTERRIER: folds 
+Uncalled bet (3500) returned to o.colombini2
+o.colombini2 collected 6379 from pot
+o.colombini2: doesn't show hand 
+*** SUMMARY ***
+Total pot 6750 | Rake 371 
+Board [Ad 4h Jh]
+Seat 5: 1948allen
+Seat 6: achladokampo
+Seat 1: hoboexpress (big blind) folded before Flop
+Seat 2: LA-GreatOne folded before Flop (didn't bet)
+Seat 3: o.colombini2 collected (6379)
+Seat 4: joes555 folded before Flop (didn't bet)
+Seat 7: KURFTERRIER folded on the Flop
+Seat 8: ms spartan (button) folded before Flop (didn't bet)
+Seat 9: vinal33 (small blind) folded before Flop
+
+
+
+PokerStars Hand #261727970032:  Hold'em No Limit (250/500) - 2026/08/12 16:21:36 UTC [2026/08/12 12:21:36 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #9 is the button
+Seat 5: 1948allen (43500 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 1: hoboexpress (62031 in chips) 
+Seat 2: LA-GreatOne (50951 in chips) 
+Seat 3: o.colombini2 (52879 in chips) 
+Seat 4: joes555 (42481 in chips) 
+Seat 7: KURFTERRIER (19906 in chips) 
+Seat 8: ms spartan (33347 in chips) 
+Seat 9: vinal33 (99669 in chips) 
+hoboexpress: posts small blind 250
+LA-GreatOne: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [4d As]
+o.colombini2: raises 2500 to 3000
+joes555: folds 
+KURFTERRIER: raises 16906 to 19906 and is all-in
+ms spartan: folds 
+vinal33: folds 
+hoboexpress: folds 
+LA-GreatOne: folds 
+o.colombini2: folds 
+Uncalled bet (16906) returned to KURFTERRIER
+KURFTERRIER collected 6750 from pot
+*** SUMMARY ***
+Total pot 6750 | Rake 0 
+Seat 5: 1948allen
+Seat 6: achladokampo
+Seat 1: hoboexpress (small blind) folded before Flop
+Seat 2: LA-GreatOne (big blind) folded before Flop
+Seat 3: o.colombini2 folded before Flop
+Seat 4: joes555 folded before Flop (didn't bet)
+Seat 7: KURFTERRIER collected (6750)
+Seat 8: ms spartan folded before Flop (didn't bet)
+Seat 9: vinal33 (button) folded before Flop (didn't bet)
+
+
+
+PokerStars Hand #261727973434:  Hold'em No Limit (250/500) - 2026/08/12 16:21:59 UTC [2026/08/12 12:21:59 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #1 is the button
+Seat 5: 1948allen (43500 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 1: hoboexpress (61781 in chips) 
+Seat 2: LA-GreatOne (50451 in chips) 
+Seat 3: o.colombini2 (49879 in chips) 
+Seat 4: joes555 (42481 in chips) 
+Seat 7: KURFTERRIER (23656 in chips) 
+Seat 8: ms spartan (33347 in chips) 
+Seat 9: vinal33 (99669 in chips) 
+LA-GreatOne: posts small blind 250
+o.colombini2: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Ad 3c]
+joes555: folds 
+KURFTERRIER: calls 500
+ms spartan: folds 
+vinal33: calls 500
+hoboexpress: folds 
+LA-GreatOne: folds 
+o.colombini2: raises 2000 to 2500
+KURFTERRIER: calls 2000
+vinal33: calls 2000
+*** FLOP *** [5h 9h 9s]
+o.colombini2: checks 
+KURFTERRIER: bets 7324
+vinal33: folds 
+o.colombini2: folds 
+Uncalled bet (7324) returned to KURFTERRIER
+KURFTERRIER collected 7324 from pot
+*** SUMMARY ***
+Total pot 7750 | Rake 426 
+Board [5h 9h 9s]
+Seat 5: 1948allen
+Seat 6: achladokampo
+Seat 1: hoboexpress (button) folded before Flop (didn't bet)
+Seat 2: LA-GreatOne (small blind) folded before Flop
+Seat 3: o.colombini2 (big blind) folded on the Flop
+Seat 4: joes555 folded before Flop (didn't bet)
+Seat 7: KURFTERRIER collected (7324)
+Seat 8: ms spartan folded before Flop (didn't bet)
+Seat 9: vinal33 folded on the Flop
+
+
+
+PokerStars Hand #261727980865:  Hold'em No Limit (250/500) - 2026/08/12 16:22:48 UTC [2026/08/12 12:22:48 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #2 is the button
+Seat 5: 1948allen (43500 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 1: hoboexpress (61781 in chips) 
+Seat 2: LA-GreatOne (50201 in chips) 
+Seat 3: o.colombini2 (47379 in chips) 
+Seat 4: joes555 (42481 in chips) 
+Seat 7: KURFTERRIER (28480 in chips) 
+Seat 8: ms spartan (33347 in chips) 
+Seat 9: vinal33 (97169 in chips) 
+o.colombini2: posts small blind 250
+joes555: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Ad 9s]
+KURFTERRIER: calls 500
+ms spartan: raises 2000 to 2500
+vinal33: calls 2500
+hoboexpress: folds 
+LA-GreatOne: folds 
+o.colombini2: calls 2250
+joes555: calls 2000
+KURFTERRIER: calls 2000
+*** FLOP *** [2s Js Jc]
+o.colombini2: checks 
+joes555: checks 
+KURFTERRIER: bets 5906
+ms spartan: calls 5906
+vinal33: folds 
+o.colombini2: folds 
+joes555: folds 
+*** TURN *** [2s Js Jc] [8h]
+KURFTERRIER: bets 11487
+ms spartan: calls 11487
+*** RIVER *** [2s Js Jc 8h] [3s]
+KURFTERRIER: checks 
+ms spartan: checks 
+*** SHOW DOWN ***
+KURFTERRIER: shows [6c 2c] (two pair, Jacks and Deuces)
+ms spartan: shows [Kd Ks] (two pair, Kings and Jacks)
+ms spartan collected 44685 from pot
+*** SUMMARY ***
+Total pot 47286 | Rake 2601 
+Board [2s Js Jc 8h 3s]
+Seat 5: 1948allen
+Seat 6: achladokampo
+Seat 1: hoboexpress folded before Flop (didn't bet)
+Seat 2: LA-GreatOne (button) folded before Flop (didn't bet)
+Seat 3: o.colombini2 (small blind) folded on the Flop
+Seat 4: joes555 (big blind) folded on the Flop
+Seat 7: KURFTERRIER showed [6c 2c] and lost with two pair, Jacks and Deuces
+Seat 8: ms spartan showed [Kd Ks] and won (44685) with two pair, Kings and Jacks
+Seat 9: vinal33 folded on the Flop
+
+
+
+PokerStars Hand #261727989562:  Hold'em No Limit (250/500) - 2026/08/12 16:23:45 UTC [2026/08/12 12:23:45 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #3 is the button
+Seat 1: hoboexpress (61781 in chips) is sitting out
+Seat 5: 1948allen (43500 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 2: LA-GreatOne (50201 in chips) 
+Seat 3: o.colombini2 (44879 in chips) 
+Seat 4: joes555 (39981 in chips) 
+Seat 7: KURFTERRIER (8587 in chips) 
+Seat 8: ms spartan (58139 in chips) 
+Seat 9: vinal33 (94669 in chips) 
+joes555: posts small blind 250
+KURFTERRIER: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Jh Jc]
+ms spartan: folds 
+vinal33: calls 500
+LA-GreatOne: calls 500
+o.colombini2: raises 2500 to 3000
+joes555: folds 
+KURFTERRIER: calls 2500
+vinal33: calls 2500
+LA-GreatOne: calls 2500
+*** FLOP *** [Ac Ks Td]
+KURFTERRIER: checks 
+vinal33: checks 
+LA-GreatOne: checks 
+o.colombini2: bets 9000
+KURFTERRIER: calls 5587 and is all-in
+vinal33: folds 
+LA-GreatOne: folds 
+Uncalled bet (3413) returned to o.colombini2
+*** TURN *** [Ac Ks Td] [Qc]
+*** RIVER *** [Ac Ks Td Qc] [Kd]
+*** SHOW DOWN ***
+KURFTERRIER: shows [4d Js] (a straight, Ten to Ace)
+o.colombini2: shows [Jh Jc] (a straight, Ten to Ace)
+KURFTERRIER collected 11068 from pot
+o.colombini2 collected 11068 from pot
+*** SUMMARY ***
+Total pot 23424 | Rake 1288 
+Board [Ac Ks Td Qc Kd]
+Seat 1: hoboexpress
+Seat 5: 1948allen
+Seat 6: achladokampo
+Seat 2: LA-GreatOne folded on the Flop
+Seat 3: o.colombini2 (button) showed [Jh Jc] and won (11068) with a straight, Ten to Ace
+Seat 4: joes555 (small blind) folded before Flop
+Seat 7: KURFTERRIER (big blind) showed [4d Js] and won (11068) with a straight, Ten to Ace
+Seat 8: ms spartan folded before Flop (didn't bet)
+Seat 9: vinal33 folded on the Flop
+
+
+
+PokerStars Hand #261727996435:  Hold'em No Limit (250/500) - 2026/08/12 16:24:30 UTC [2026/08/12 12:24:30 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #4 is the button
+Seat 1: hoboexpress (61781 in chips) is sitting out
+Seat 5: 1948allen (43500 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 2: LA-GreatOne (47201 in chips) 
+Seat 3: o.colombini2 (47360 in chips) 
+Seat 4: joes555 (39731 in chips) 
+Seat 7: KURFTERRIER (11068 in chips) 
+Seat 8: ms spartan (58139 in chips) 
+Seat 9: vinal33 (91669 in chips) 
+KURFTERRIER: posts small blind 250
+ms spartan: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [4h 5d]
+vinal33: folds 
+LA-GreatOne: folds 
+o.colombini2: calls 500
+joes555: folds 
+KURFTERRIER: calls 250
+ms spartan: checks 
+*** FLOP *** [2s Qc 5s]
+KURFTERRIER: bets 500
+ms spartan: folds 
+o.colombini2: raises 2000 to 2500
+KURFTERRIER: calls 2000
+*** TURN *** [2s Qc 5s] [Qh]
+KURFTERRIER: checks 
+o.colombini2: checks 
+*** RIVER *** [2s Qc 5s Qh] [Ad]
+KURFTERRIER: checks 
+o.colombini2: checks 
+*** SHOW DOWN ***
+KURFTERRIER: shows [8d Ks] (a pair of Queens)
+o.colombini2: shows [4h 5d] (two pair, Queens and Fives)
+o.colombini2 collected 6142 from pot
+*** SUMMARY ***
+Total pot 6500 | Rake 358 
+Board [2s Qc 5s Qh Ad]
+Seat 1: hoboexpress
+Seat 5: 1948allen
+Seat 6: achladokampo
+Seat 2: LA-GreatOne folded before Flop (didn't bet)
+Seat 3: o.colombini2 showed [4h 5d] and won (6142) with two pair, Queens and Fives
+Seat 4: joes555 (button) folded before Flop (didn't bet)
+Seat 7: KURFTERRIER (small blind) showed [8d Ks] and lost with a pair of Queens
+Seat 8: ms spartan (big blind) folded on the Flop
+Seat 9: vinal33 folded before Flop (didn't bet)
+
+
+
+PokerStars Hand #261728001848:  Hold'em No Limit (250/500) - 2026/08/12 16:25:06 UTC [2026/08/12 12:25:06 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #7 is the button
+Seat 1: hoboexpress (61781 in chips) is sitting out
+Seat 6: achladokampo (38290 in chips) is sitting out
+Seat 2: LA-GreatOne (47201 in chips) 
+Seat 3: o.colombini2 (50502 in chips) 
+Seat 4: joes555 (39731 in chips) 
+Seat 5: 1948allen (43500 in chips) 
+Seat 7: KURFTERRIER (8068 in chips) 
+Seat 8: ms spartan (57639 in chips) 
+Seat 9: vinal33 (91669 in chips) 
+ms spartan: posts small blind 250
+vinal33: posts big blind 500
+1948allen: posts small & big blinds 750
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Qh Jc]
+LA-GreatOne: folds 
+o.colombini2: raises 2500 to 3000
+joes555: folds 
+1948allen: folds 
+KURFTERRIER: raises 5068 to 8068 and is all-in
+ms spartan: raises 49571 to 57639 and is all-in
+vinal33: folds 
+o.colombini2: folds 
+Uncalled bet (49571) returned to ms spartan
+*** FLOP *** [5h Tc 8d]
+*** TURN *** [5h Tc 8d] [6s]
+*** RIVER *** [5h Tc 8d 6s] [Kc]
+*** SHOW DOWN ***
+ms spartan: shows [Ah Ac] (a pair of Aces)
+KURFTERRIER: shows [6c 7s] (a pair of Sixes)
+ms spartan collected 19265 from pot
+*** SUMMARY ***
+Total pot 20386 | Rake 1121 
+Board [5h Tc 8d 6s Kc]
+Seat 1: hoboexpress
+Seat 6: achladokampo
+Seat 2: LA-GreatOne folded before Flop (didn't bet)
+Seat 3: o.colombini2 folded before Flop
+Seat 4: joes555 folded before Flop (didn't bet)
+Seat 5: 1948allen folded before Flop (didn't bet)
+Seat 7: KURFTERRIER (button) showed [6c 7s] and lost with a pair of Sixes
+Seat 8: ms spartan (small blind) showed [Ah Ac] and won (19265) with a pair of Aces
+Seat 9: vinal33 (big blind) folded before Flop
+
+
+
+PokerStars Hand #261728006087:  Hold'em No Limit (250/500) - 2026/08/12 16:25:34 UTC [2026/08/12 12:25:34 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #8 is the button
+Seat 1: hoboexpress (61781 in chips) is sitting out
+Seat 7: KURFTERRIER (0 in chips) is sitting out
+Seat 2: LA-GreatOne (47201 in chips) 
+Seat 3: o.colombini2 (47502 in chips) 
+Seat 4: joes555 (39731 in chips) 
+Seat 5: 1948allen (42750 in chips) 
+Seat 6: achladokampo (38290 in chips) 
+Seat 8: ms spartan (68836 in chips) 
+Seat 9: vinal33 (91169 in chips) 
+vinal33: posts small blind 250
+LA-GreatOne: posts big blind 500
+achladokampo: posts small & big blinds 750
+*** HOLE CARDS ***
+Dealt to o.colombini2 [5h Qs]
+o.colombini2: calls 500
+joes555: calls 500
+KURFTERRIER leaves the table
+1948allen: calls 500
+achladokampo has timed out
+achladokampo: checks 
+ms spartan: calls 500
+vinal33: calls 250
+LA-GreatOne: checks 
+*** FLOP *** [Ks Jd 7c]
+vinal33: checks 
+LA-GreatOne: checks 
+o.colombini2: bets 2500
+joes555: folds 
+1948allen: folds 
+achladokampo: calls 2500
+ms spartan: calls 2500
+vinal33: folds 
+LA-GreatOne: folds 
+*** TURN *** [Ks Jd 7c] [7h]
+o.colombini2: checks 
+achladokampo: checks 
+ms spartan: checks 
+*** RIVER *** [Ks Jd 7c 7h] [5c]
+o.colombini2: bets 2500
+achladokampo: calls 2500
+ms spartan: folds 
+*** SHOW DOWN ***
+o.colombini2: shows [5h Qs] (two pair, Sevens and Fives)
+achladokampo: shows [Jc 8c] (two pair, Jacks and Sevens)
+achladokampo collected 15356 from pot
+*** SUMMARY ***
+Total pot 16250 | Rake 894 
+Board [Ks Jd 7c 7h 5c]
+Seat 1: hoboexpress
+Seat 7: KURFTERRIER
+Seat 2: LA-GreatOne (big blind) folded on the Flop
+Seat 3: o.colombini2 showed [5h Qs] and lost with two pair, Sevens and Fives
+Seat 4: joes555 folded on the Flop
+Seat 5: 1948allen folded on the Flop
+Seat 6: achladokampo showed [Jc 8c] and won (15356) with two pair, Jacks and Sevens
+Seat 8: ms spartan (button) folded on the River
+Seat 9: vinal33 (small blind) folded on the Flop
+
+
+
+PokerStars Hand #261728017570:  Hold'em No Limit (250/500) - 2026/08/12 16:26:52 UTC [2026/08/12 12:26:52 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #9 is the button
+Seat 1: hoboexpress (61781 in chips) is sitting out
+Seat 2: LA-GreatOne (46701 in chips) 
+Seat 3: o.colombini2 (42002 in chips) 
+Seat 4: joes555 (39231 in chips) 
+Seat 5: 1948allen (42250 in chips) 
+Seat 6: achladokampo (47896 in chips) 
+Seat 8: ms spartan (65836 in chips) 
+Seat 9: vinal33 (90669 in chips) 
+LA-GreatOne: posts small blind 250
+o.colombini2: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Js 3c]
+BESIGNOU 03 joins the table at seat #7 
+joes555: folds 
+BESIGNOU 03 leaves the table
+1948allen: calls 500
+achladokampo: folds 
+ms spartan: calls 500
+vinal33: calls 500
+LA-GreatOne: folds 
+o.colombini2: checks 
+*** FLOP *** [Ac 7h Qc]
+o.colombini2: checks 
+1948allen: bets 2126
+ms spartan: calls 2126
+vinal33: folds 
+o.colombini2: folds 
+*** TURN *** [Ac 7h Qc] [3s]
+1948allen: bets 3072
+ms spartan: calls 3072
+*** RIVER *** [Ac 7h Qc 3s] [Ts]
+1948allen: checks 
+ms spartan: checks 
+*** SHOW DOWN ***
+1948allen: shows [9s Ad] (a pair of Aces)
+ms spartan: mucks hand 
+1948allen collected 11950 from pot
+BESIGNOU 03 joins the table at seat #7 
+*** SUMMARY ***
+Total pot 12646 | Rake 696 
+Board [Ac 7h Qc 3s Ts]
+Seat 1: hoboexpress
+Seat 2: LA-GreatOne (small blind) folded before Flop
+Seat 3: o.colombini2 (big blind) folded on the Flop
+Seat 4: joes555 folded before Flop (didn't bet)
+Seat 5: 1948allen showed [9s Ad] and won (11950) with a pair of Aces
+Seat 6: achladokampo folded before Flop (didn't bet)
+Seat 8: ms spartan mucked [Ah 8h]
+Seat 9: vinal33 (button) folded on the Flop
+
+
+
+PokerStars Hand #261728025415:  Hold'em No Limit (250/500) - 2026/08/12 16:27:46 UTC [2026/08/12 12:27:46 ET]
+Table 'Octavia II' 9-max (Play Money) Seat #2 is the button
+Seat 1: hoboexpress (61781 in chips) is sitting out
+Seat 6: achladokampo (47896 in chips) is sitting out
+Seat 2: LA-GreatOne (46451 in chips) 
+Seat 3: o.colombini2 (41502 in chips) 
+Seat 4: joes555 (39231 in chips) 
+Seat 5: 1948allen (48502 in chips) 
+Seat 7: BESIGNOU 03 (50000 in chips) 
+Seat 8: ms spartan (60138 in chips) 
+Seat 9: vinal33 (90169 in chips) 
+o.colombini2: posts small blind 250
+joes555: posts big blind 500
+BESIGNOU 03: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Qc 5c]
+1948allen: folds 
+BESIGNOU 03: checks 
+ms spartan: folds 
+vinal33: calls 500
+LA-GreatOne: folds 
+o.colombini2: raises 2500 to 3000
+joes555: folds 
+BESIGNOU 03: calls 2500
+vinal33: calls 2500
+*** FLOP *** [3h 6h 7s]
+o.colombini2: bets 4488
+BESIGNOU 03: calls 4488
+vinal33: folds 
+*** TURN *** [3h 6h 7s] [4s]
+o.colombini2: bets 12000
+BESIGNOU 03: folds 
+Uncalled bet (12000) returned to o.colombini2
+o.colombini2 collected 17460 from pot
+o.colombini2: doesn't show hand 
+*** SUMMARY ***
+Total pot 18476 | Rake 1016 
+Board [3h 6h 7s 4s]
+Seat 1: hoboexpress
+Seat 6: achladokampo
+Seat 2: LA-GreatOne (button) folded before Flop (didn't bet)
+Seat 3: o.colombini2 (small blind) collected (17460)
+Seat 4: joes555 (big blind) folded before Flop
+Seat 5: 1948allen folded before Flop (didn't bet)
+Seat 7: BESIGNOU 03 folded on the Turn
+Seat 8: ms spartan folded before Flop (didn't bet)
+Seat 9: vinal33 folded on the Flop
