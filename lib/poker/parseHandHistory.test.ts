@@ -285,9 +285,7 @@ describe("parseActions", () => {
 
 describe("parseUncalledBets", () => {
   it("parses the uncalled bet returned to the raiser (hand 2)", () => {
-    expect(parseUncalledBets(hands[1])).toEqual([
-      { player: "o.colombini2", amount: 350000 },
-    ]);
+        expect(parseUncalledBets(hands[1])).toEqual([{ player: 'o.colombini2', amount: 350000, street: 'flop' }])
   });
 });
 

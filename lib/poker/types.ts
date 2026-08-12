@@ -43,6 +43,7 @@ export interface Action {
 export interface UncalledBetReturn {
     player: string
     amount: number
+    street: Street
 }
 
 export interface Reveal {
