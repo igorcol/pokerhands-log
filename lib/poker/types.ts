@@ -1,5 +1,6 @@
 export type Suit = 'h' | 'd' | 'c' | 's'
 export type Rank = '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'T' | 'J' | 'Q' | 'K' | 'A'
+export type PositionName = 'BTN' | 'SB' | 'BB' | 'UTG' | 'MP' | 'CO' // TODO: tabela por tamanho de mesa
 
 export type Street = 'preflop' | 'flop' | 'turn' | 'river'
 // Em cash game só tem 3 tips. Ante/dead blind fica de fora
