@@ -15,6 +15,7 @@ import { buildTimeline } from '@/lib/poker/timeline'
 import type { Hand } from '@/lib/poker/types'
 import { Controls } from './Controls'
 import { Table } from './Table'
+import { ReplayHeader } from './ReplayHeader'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SPEEDS = [0.5, 1, 2] as const
@@ -133,51 +134,54 @@ export function ReplayStage({ hand }: { hand: Hand }) {
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-      }, [timeline.length, segments, router, isPlaying, clampedFrame, step, jumpTo])
+    }, [timeline.length, segments, router, isPlaying, clampedFrame, step, jumpTo])
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-base p-10">
-            <Table
-                hand={hand}
-                state={state}
-                layout={layout}
-                activePlayerName={activePlayerName}
-                lastActions={lastActions}
-                instant={instant}
-            />
-            <Controls
-                frame={clampedFrame}
-                totalFrames={timeline.length}
-                phase={phase}
-                isPlaying={isPlaying}
-                speed={speed}
-                segments={segments}
-                onTogglePlay={() => {
-                    if (!isPlaying && clampedFrame >= timeline.length) jumpTo(0)
-                    setIsPlaying((p) => !p)
-                }}
-                onStepBack={() => {
-                    setIsPlaying(false)
-                    jumpTo(clampedFrame - 1)
-                }}
-                onStepForward={() => {
-                    setIsPlaying(false)
-                    step()
-                }}
-                onJumpStart={() => {
-                    setIsPlaying(false)
-                    jumpTo(0)
-                }}
-                onJumpEnd={() => {
-                    setIsPlaying(false)
-                    jumpTo(timeline.length)
-                }}
-                onJump={(target) => {
-                    setIsPlaying(false)
-                    jumpTo(target)
-                }}
-                onSpeedChange={setSpeed}
-            />
+        <div className="flex min-h-screen flex-col bg-base">
+            <ReplayHeader />
+            <div className="flex flex-1 flex-col items-center justify-center gap-8 p-10 pt-0">
+                <Table
+                    hand={hand}
+                    state={state}
+                    layout={layout}
+                    activePlayerName={activePlayerName}
+                    lastActions={lastActions}
+                    instant={instant}
+                />
+                <Controls
+                    frame={clampedFrame}
+                    totalFrames={timeline.length}
+                    phase={phase}
+                    isPlaying={isPlaying}
+                    speed={speed}
+                    segments={segments}
+                    onTogglePlay={() => {
+                        if (!isPlaying && clampedFrame >= timeline.length) jumpTo(0)
+                        setIsPlaying((p) => !p)
+                    }}
+                    onStepBack={() => {
+                        setIsPlaying(false)
+                        jumpTo(clampedFrame - 1)
+                    }}
+                    onStepForward={() => {
+                        setIsPlaying(false)
+                        step()
+                    }}
+                    onJumpStart={() => {
+                        setIsPlaying(false)
+                        jumpTo(0)
+                    }}
+                    onJumpEnd={() => {
+                        setIsPlaying(false)
+                        jumpTo(timeline.length)
+                    }}
+                    onJump={(target) => {
+                        setIsPlaying(false)
+                        jumpTo(target)
+                    }}
+                    onSpeedChange={setSpeed}
+                />
+            </div>
         </div>
     )
 }
