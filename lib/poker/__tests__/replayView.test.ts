@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseHandHistory } from "../parseHandHistory";
-import { activePlayer, lastActionsThisStreet, seatLayout, streetSegments } from "../replayView";
+import { activePlayer, formatPhase, lastActionsThisStreet, phaseAtFrame, seatLayout, streetSegments } from "../replayView";
 import { buildTimeline, ReplayEvent } from "../timeline";
 import { fixture } from "./fixture";
 
@@ -152,5 +152,26 @@ describe('lastActionsThisStreet', () => {
       amount: 0,
       isAllIn: false,
     })
+  })
+})
+
+describe('formatPhase / phaseAtFrame', () => {
+  const segments = streetSegments(splitPotTimeline)
+
+  it('resolves the phase for a frame inside each segment', () => {
+    expect(phaseAtFrame(segments, 0)).toBe('preflop')
+    expect(phaseAtFrame(segments, 10)).toBe('preflop')
+    expect(phaseAtFrame(segments, 11)).toBe('flop')
+    expect(phaseAtFrame(segments, 19)).toBe('flop')
+    expect(phaseAtFrame(segments, 20)).toBe('turn')
+  })
+
+  it('falls back to the last phase when frame is at the very end', () => {
+    expect(phaseAtFrame(segments, splitPotTimeline.length)).toBe('showdown')
+  })
+
+  it('formats every phase in pt-BR', () => {
+    expect(formatPhase('preflop')).toBe('pré-flop')
+    expect(formatPhase('showdown')).toBe('showdown')
   })
 })
