@@ -5,6 +5,7 @@ import { formatChips } from '@/lib/poker/format'
 import { toHandListItem } from '@/lib/poker/handListItem'
 import { withResults } from '@/lib/poker/handResult'
 import { listAccounts, readAccountHands } from '@/lib/poker/handHistorySource'
+import { NoAccounts } from '@/components/hands/NoAccounts'
 
 export default async function Page() {
   // readFileSync completaria durante o prerender e congelaria a lista no build —
@@ -13,6 +14,10 @@ export default async function Page() {
 
   const accounts = listAccounts()
   const account = accounts[0]
+
+  // Fallback de erro de caminho da pasta
+  if (!account) return <NoAccounts />
+
   const { hands, skipped } = readAccountHands(account)
   const items = withResults(hands).map(toHandListItem)
   const table = hands[0]

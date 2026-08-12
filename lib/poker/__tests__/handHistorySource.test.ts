@@ -42,10 +42,28 @@ describeReal("handHistorySource (pasta real)", () => {
 });
 
 describe("handHistoryDir", () => {
-  it("honours the env override", () => {
+  function withEnv(value: string | undefined, run: () => void) {
     const original = process.env.POKER_HAND_HISTORY_DIR;
-    process.env.POKER_HAND_HISTORY_DIR = join("C:", "tmp", "hh");
-    expect(handHistoryDir()).toBe(join("C:", "tmp", "hh"));
-    process.env.POKER_HAND_HISTORY_DIR = original;
+    if (value === undefined) delete process.env.POKER_HAND_HISTORY_DIR;
+    else process.env.POKER_HAND_HISTORY_DIR = value;
+    try {
+      run();
+    } finally {
+      // Atribuir undefined grava a string "undefined" -- tem que deletar de verdade.
+      if (original === undefined) delete process.env.POKER_HAND_HISTORY_DIR;
+      else process.env.POKER_HAND_HISTORY_DIR = original;
+    }
+  }
+
+  it("honours the env override", () => {
+    withEnv(join("C:", "tmp", "hh"), () => {
+      expect(handHistoryDir()).toBe(join("C:", "tmp", "hh"));
+    });
+  });
+
+  it("returns no accounts when the folder does not exist", () => {
+    withEnv(join("C:", "nao", "existe", "jamais"), () => {
+      expect(listAccounts()).toEqual([]);
+    });
   });
 });
