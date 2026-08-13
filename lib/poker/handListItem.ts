@@ -67,6 +67,24 @@ export function filterByPeriod<T extends { dateIso: string }>(
   return items.filter((item) => now.getTime() - new Date(item.dateIso).getTime() <= SEVEN_DAYS_MS)
 }
 
+const PERIOD_ORDER: PeriodKey[] = ["today", "7d", "month", "all"];
+
+// Primeiro período mais amplo que o atual que tenha alguma mão. Alimenta o atalho do
+// estado vazio — em vez de trocar o filtro sozinho (o que faria o resumo do topo mentir),
+// a tela oferece o pulo e deixa a escolha com quem está olhando.
+export function nextPeriodWithHands(
+  items: HandListItem[],
+  current: PeriodKey,
+  now: Date,
+): { period: PeriodKey; count: number } | null {
+  const startIndex = PERIOD_ORDER.indexOf(current);
+  for (const period of PERIOD_ORDER.slice(startIndex + 1)) {
+    const count = filterByPeriod(items, period, now).length;
+    if (count > 0) return { period, count };
+  }
+  return null;
+}
+
 export type FilterKey = 'all' | 'won' | 'lost' | 'showdown' | 'biggest-pots'
 
 // 'biggest-pots' reordena em vez de excluir — toda mão tem pote, então "filtrar" por

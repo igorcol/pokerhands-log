@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import type { FilterKey, HandListItem, PeriodKey } from '@/lib/poker/handListItem'
-import { filterByPeriod, filterHandListItems } from '@/lib/poker/handListItem'
+import { filterByPeriod, filterHandListItems, nextPeriodWithHands } from '@/lib/poker/handListItem'
 import { buildStackCurve, summarizeHandListItems } from '@/lib/poker/summary'
 import { HandRow, HandRowHeader } from './HandRow'
 import { SummaryPanel } from './SummaryPanel'
+import { EmptyHands } from './EmptyHands'
 
 // Fronteira cliente/servidor: a página lê disco e parseia no servidor; aqui só filtramos
 // o que já veio pronto. Período recalcula resumo e sparkline; a aba de categoria só
@@ -54,6 +55,9 @@ export function HandsExplorer({
   // A lista mostra a mão mais recente no topo; resumo e sparkline continuam em ordem
   // ascendente (senão o cálculo do stack acumulado inverteria junto).
   const visibleItems = filter === 'biggest-pots' ? filteredItems : [...filteredItems].reverse()
+
+  const now = new Date()
+  const suggestion = nextPeriodWithHands(items, period, now)
 
   return (
     <>
@@ -115,10 +119,38 @@ export function HandsExplorer({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6">
-        <HandRowHeader />
+        {visibleItems.length > 0 && <HandRowHeader />}
         {visibleItems.map((item) => (
           <HandRow key={item.id} item={item} />
         ))}
+
+        {/* Dois vazios diferentes: o período não tem mão nenhuma, ou tem mas a aba
+            de categoria filtrou todas. Cada um pede um atalho diferente. */}
+        {visibleItems.length === 0 && periodItems.length === 0 && (
+          <EmptyHands
+            title={`Nenhuma mão ${PERIOD_SUMMARY_LABEL[period]}`}
+            description={
+              suggestion
+                ? `Você tem ${suggestion.count} ${suggestion.count === 1 ? 'mão' : 'mãos'} em ${PERIOD_SUMMARY_LABEL[suggestion.period]}.`
+                : 'Nenhuma mão encontrada no histórico.'
+            }
+            actionLabel={
+              suggestion
+                ? `Ver ${PERIOD_SUMMARY_LABEL[suggestion.period]}`
+                : undefined
+            }
+            onAction={suggestion ? () => setPeriod(suggestion.period) : undefined}
+          />
+        )}
+
+        {visibleItems.length === 0 && periodItems.length > 0 && (
+          <EmptyHands
+            title="Nenhuma mão neste filtro"
+            description={`Você tem ${periodItems.length} ${periodItems.length === 1 ? 'mão' : 'mãos'} ${PERIOD_SUMMARY_LABEL[period]}, mas nenhuma se encaixa aqui.`}
+            actionLabel="Ver todas"
+            onAction={() => setFilter('all')}
+          />
+        )}
       </div>
     </>
   )

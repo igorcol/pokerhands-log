@@ -3,6 +3,7 @@ import { withResults } from "../handResult";
 import {
   filterByPeriod,
   filterHandListItems,
+  nextPeriodWithHands,
   toHandListItem,
 } from "../handListItem";
 import { parseHandHistory } from "../parseHandHistory";
@@ -82,5 +83,35 @@ describe("filterHandListItems", () => {
     expect(sorted[0].pot).toBe(4728600);
     const pots = sorted.map((item) => item.pot);
     expect(pots).toEqual([...pots].sort((a, b) => b - a));
+  });
+});
+
+describe("nextPeriodWithHands", () => {
+  const reference = new Date(items[0].dateIso);
+
+  const nextDay = new Date(reference);
+  nextDay.setDate(nextDay.getDate() + 1);
+
+  const nextYear = new Date(reference);
+  nextYear.setFullYear(nextYear.getFullYear() + 1);
+
+  it("suggests the first wider period that has hands", () => {
+    // No dia seguinte, "hoje" está vazio mas a janela de 7 dias ainda alcança tudo.
+    expect(nextPeriodWithHands(items, "today", nextDay)).toEqual({
+      period: "7d",
+      count: 11,
+    });
+  });
+
+  it("skips empty periods until it finds one with hands", () => {
+    // Um ano depois, só "tudo" ainda contém as mãos.
+    expect(nextPeriodWithHands(items, "today", nextYear)).toEqual({
+      period: "all",
+      count: 11,
+    });
+  });
+
+  it("returns null when there is nothing wider to suggest", () => {
+    expect(nextPeriodWithHands(items, "all", nextDay)).toBeNull();
   });
 });
