@@ -37,7 +37,7 @@ export function ReplayStage({ hand }: { hand: Hand }) {
     const [instant, setInstant] = useState(true)
     const [isPlaying, setIsPlaying] = useState(false)
     const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(1)
-      const [isLogOpen, setIsLogOpen] = useState(true)
+    const [isLogOpen, setIsLogOpen] = useState(true)
 
     const clampedFrame = Math.min(Math.max(frame, 0), timeline.length)
 
@@ -70,7 +70,7 @@ export function ReplayStage({ hand }: { hand: Hand }) {
     )
     const phase = useMemo(() => phaseAtFrame(segments, clampedFrame), [segments, clampedFrame])
 
-      const logGroups = useMemo(() => buildEventLog(hand, timeline), [hand, timeline])
+    const logGroups = useMemo(() => buildEventLog(hand, timeline), [hand, timeline])
 
     useEffect(() => {
         if (!isPlaying) return
@@ -141,76 +141,79 @@ export function ReplayStage({ hand }: { hand: Hand }) {
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [timeline.length, segments, router, isPlaying, clampedFrame, step, jumpTo])
 
-      return (
-    <div className="flex min-h-screen bg-base">
-      <div className="flex min-w-0 flex-1 flex-col">
-        <ReplayHeader isLogOpen={isLogOpen} onToggleLog={() => setIsLogOpen((o) => !o)} />
-        <div className="flex flex-1 flex-col items-center justify-center gap-8 p-10 pt-0">
-          <Table
-            hand={hand}
-            state={state}
-            layout={layout}
-            activePlayerName={activePlayerName}
-            lastActions={lastActions}
-            instant={instant}
-          />
-          <Controls
-            frame={clampedFrame}
-            totalFrames={timeline.length}
-            phase={phase}
-            isPlaying={isPlaying}
-            speed={speed}
-            segments={segments}
-            onTogglePlay={() => {
-              if (!isPlaying && clampedFrame >= timeline.length) jumpTo(0)
-              setIsPlaying((p) => !p)
-            }}
-            onStepBack={() => {
-              setIsPlaying(false)
-              jumpTo(clampedFrame - 1)
-            }}
-            onStepForward={() => {
-              setIsPlaying(false)
-              step()
-            }}
-            onJumpStart={() => {
-              setIsPlaying(false)
-              jumpTo(0)
-            }}
-            onJumpEnd={() => {
-              setIsPlaying(false)
-              jumpTo(timeline.length)
-            }}
-            onJump={(target) => {
-              setIsPlaying(false)
-              jumpTo(target)
-            }}
-            onSpeedChange={setSpeed}
-          />
-        </div>
-      </div>
+    return (
+        <div className="flex min-h-screen bg-base">
+            <div className="flex min-w-0 flex-1 flex-col">
+                <ReplayHeader isLogOpen={isLogOpen} onToggleLog={() => setIsLogOpen((o) => !o)} />
+                <div className="flex min-h-0 flex-1 items-center justify-center px-10 pb-4">
+                    <Table
+                        hand={hand}
+                        state={state}
+                        layout={layout}
+                        activePlayerName={activePlayerName}
+                        lastActions={lastActions}
+                        instant={instant}
+                    />
+                </div>
 
-      {isLogOpen && (
-        <aside className="flex h-screen w-82.5 shrink-0 flex-col border-l border-hairline-soft bg-[#0B0B0D]">
-          <div className="flex h-15.5 shrink-0 items-center justify-between px-5">
-            <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-3">
-              Sequência
-            </span>
-            <span className="font-mono text-[11px] text-ink-3">
-              {clampedFrame} / {timeline.length}
-            </span>
-          </div>
-          <EventLog
-            groups={logGroups}
-            frame={clampedFrame}
-            hero={hand.dealtHoleCards?.player ?? null}
-            onJump={(target) => {
-              setIsPlaying(false)
-              jumpTo(target)
-            }}
-          />
-        </aside>
-      )}
-    </div>
-  )
+                <div className="shrink-0 px-6 pb-5">
+                    <Controls
+                        frame={clampedFrame}
+                        totalFrames={timeline.length}
+                        phase={phase}
+                        isPlaying={isPlaying}
+                        speed={speed}
+                        segments={segments}
+                        onTogglePlay={() => {
+                            if (!isPlaying && clampedFrame >= timeline.length) jumpTo(0)
+                            setIsPlaying((p) => !p)
+                        }}
+                        onStepBack={() => {
+                            setIsPlaying(false)
+                            jumpTo(clampedFrame - 1)
+                        }}
+                        onStepForward={() => {
+                            setIsPlaying(false)
+                            step()
+                        }}
+                        onJumpStart={() => {
+                            setIsPlaying(false)
+                            jumpTo(0)
+                        }}
+                        onJumpEnd={() => {
+                            setIsPlaying(false)
+                            jumpTo(timeline.length)
+                        }}
+                        onJump={(target) => {
+                            setIsPlaying(false)
+                            jumpTo(target)
+                        }}
+                        onSpeedChange={setSpeed}
+                    />
+                </div>
+            </div>
+
+            {isLogOpen && (
+                <aside className="flex h-screen w-82.5 shrink-0 flex-col border-l border-hairline-soft bg-[#0B0B0D]">
+                    <div className="flex h-15.5 shrink-0 items-center justify-between px-5">
+                        <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-3">
+                            Sequência
+                        </span>
+                        <span className="font-mono text-[11px] text-ink-3">
+                            {clampedFrame} / {timeline.length}
+                        </span>
+                    </div>
+                    <EventLog
+                        groups={logGroups}
+                        frame={clampedFrame}
+                        hero={hand.dealtHoleCards?.player ?? null}
+                        onJump={(target) => {
+                            setIsPlaying(false)
+                            jumpTo(target)
+                        }}
+                    />
+                </aside>
+            )}
+        </div>
+    )
 }

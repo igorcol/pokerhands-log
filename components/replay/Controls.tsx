@@ -57,7 +57,7 @@ export function Controls({
   onSpeedChange: (speed: (typeof SPEEDS)[number]) => void
 }) {
   return (
-    <div className="w-full max-w-[min(90vw,1200px)]">
+    <div className="w-full">
       <div className="mb-3.5">
         <StreetTrack segments={segments} frame={frame} onJump={onJump} />
       </div>
@@ -85,9 +85,8 @@ export function Controls({
               key={s}
               type="button"
               onClick={() => onSpeedChange(s)}
-              className={`cursor-pointer rounded-full px-2.5 py-1 font-mono text-[11px] ${
-                speed === s ? 'bg-white/10 font-medium text-ink' : 'text-ink-2'
-              }`}
+              className={`cursor-pointer rounded-full px-2.5 py-1 font-mono text-[11px] ${speed === s ? 'bg-white/10 font-medium text-ink' : 'text-ink-2'
+                }`}
             >
               {s}×
             </button>
