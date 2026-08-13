@@ -62,7 +62,7 @@ export function TableSeat({
                 style={{ left: `${anchor.left}%`, top: `${anchor.top}%` }}
             >
                 <div
-                    className={`z-0 -mb-4.75 flex transition-opacity duration-300 ${isDimmed ? 'opacity-0' : 'opacity-100'
+                    className={`z-0 -mb-6 flex transition-opacity duration-300 ${isDimmed ? 'opacity-0' : 'opacity-100'
                         }`}
                 >
                     {slot.isHero && holeCards ? (
@@ -77,7 +77,7 @@ export function TableSeat({
                                     size="table"
                                 />
                             </div>
-                            <div className="-ml-3 rotate-6">
+                            <div className="-ml-4 rotate-6">
                                 <FlippableCard
                                     card={revealedCards?.[1] ?? null}
                                     faceUp={isRevealed}

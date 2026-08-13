@@ -1,4 +1,5 @@
 import { FlippableCard } from '@/components/poker/FlippableCard'
+import { SIZES } from '@/components/poker/PlayingCard'
 import type { Card } from '@/lib/poker/types'
 
 // Recebe o board COMPLETO da mão (dado estático) e quantas cartas já foram reveladas
@@ -15,7 +16,7 @@ export function CommunityBoard({
   revealedCount: number
 }) {
   return (
-    <div className="flex items-end gap-1.75">
+    <div className="flex items-end gap-2">
       {Array.from({ length: 5 }, (_, index) => {
         const card = allCards[index] ?? null
         const isRevealed = index < revealedCount
@@ -23,8 +24,15 @@ export function CommunityBoard({
         const delayMs = index < 3 ? index * FLOP_STAGGER_MS : 0
 
         return (
-          <div key={index} className="relative h-16.75 w-12">
-            <div className="absolute inset-0 rounded-md bg-white/[0.022]" />
+          <div
+            key={index}
+            className="relative"
+            style={{ width: SIZES.board.w, height: SIZES.board.h }}
+          >
+            <div
+              className="absolute inset-0 bg-white/[0.022]"
+              style={{ borderRadius: SIZES.board.radius }}
+            />
             {card && (
               <div className="absolute inset-0">
                 <FlippableCard
