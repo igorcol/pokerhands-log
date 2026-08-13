@@ -1,0 +1,242 @@
+﻿PokerStars Hand #261733911820:  Hold'em No Limit (250/500) - 2026/08/13 2:52:33 UTC [2026/08/12 22:52:33 ET]
+Table 'Fantasia II' 9-max (Play Money) Seat #5 is the button
+Seat 8: rona17 (49000 in chips) is sitting out
+Seat 1: o.colombini2 (50000 in chips) 
+Seat 2: anabela481 (225183 in chips) 
+Seat 3: Plesrunas (57667 in chips) 
+Seat 4: superMagnif (132460 in chips) 
+Seat 5: mdz_javier (36771 in chips) 
+Seat 7: doglover1796 (64758 in chips) 
+Seat 9: Tireur26 (44750 in chips) 
+doglover1796: posts small blind 250
+rona17 has timed out while disconnected
+rona17: is sitting out 
+Tireur26: posts big blind 500
+o.colombini2: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [3s 5c]
+o.colombini2: checks 
+anabela481: folds 
+Plesrunas: calls 500
+superMagnif: calls 500
+mdz_javier: raises 1000 to 1500
+rona17 is disconnected 
+doglover1796: calls 1250
+Tireur26: folds 
+o.colombini2: folds 
+Plesrunas: calls 1000
+superMagnif: calls 1000
+*** FLOP *** [5d Tc As]
+ederepf joins the table at seat #6 
+doglover1796: checks 
+Plesrunas: checks 
+superMagnif: checks 
+mdz_javier: checks 
+*** TURN *** [5d Tc As] [Jh]
+doglover1796: checks 
+rona17 is disconnected 
+Plesrunas: bets 3307
+superMagnif: folds 
+mdz_javier: folds 
+doglover1796: calls 3307
+*** RIVER *** [5d Tc As Jh] [Jc]
+doglover1796: checks 
+Plesrunas: bets 12865
+doglover1796: folds 
+Uncalled bet (12865) returned to Plesrunas
+Plesrunas collected 12865 from pot
+Plesrunas: doesn't show hand 
+*** SUMMARY ***
+Total pot 13614 | Rake 749 
+Board [5d Tc As Jh Jc]
+Seat 8: rona17
+Seat 1: o.colombini2 folded before Flop (didn't bet)
+Seat 2: anabela481 folded before Flop (didn't bet)
+Seat 3: Plesrunas collected (12865)
+Seat 4: superMagnif folded on the Turn
+Seat 5: mdz_javier (button) folded on the Turn
+Seat 7: doglover1796 (small blind) folded on the River
+Seat 9: Tireur26 (big blind) folded before Flop
+
+
+
+PokerStars Hand #261733963328:  Hold'em No Limit (250/500) - 2026/08/13 3:03:32 UTC [2026/08/12 23:03:32 ET]
+Table 'Fantasia II' 9-max (Play Money) Seat #9 is the button
+Seat 8: rona17 (49000 in chips) is sitting out
+Seat 1: o.colombini2 (43250 in chips) 
+Seat 2: anabela481 (219433 in chips) 
+Seat 3: guiller1947 (84450 in chips) 
+Seat 4: superMagnif (198647 in chips) 
+Seat 5: mdz_javier (55450 in chips) 
+Seat 6: ederepf (20626 in chips) 
+Seat 7: ronalvieira (50000 in chips) 
+Seat 9: Tireur26 (45548 in chips) 
+o.colombini2: posts small blind 250
+anabela481: posts big blind 500
+ronalvieira: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Th Ks]
+guiller1947: folds 
+superMagnif: folds 
+mdz_javier: folds 
+ederepf: calls 500
+ronalvieira: raises 500 to 1000
+Tireur26: calls 1000
+o.colombini2: raises 2500 to 3500
+anabela481: folds 
+ederepf: folds 
+ronalvieira: raises 2500 to 6000
+Tireur26: calls 5000
+o.colombini2: calls 2500
+*** FLOP *** [4c Td 6h]
+o.colombini2: checks 
+ronalvieira: bets 3500
+Tireur26: calls 3500
+o.colombini2: calls 3500
+*** TURN *** [4c Td 6h] [Ac]
+o.colombini2: bets 14000
+ronalvieira: raises 14000 to 28000
+Tireur26: calls 28000
+o.colombini2: calls 14000
+*** RIVER *** [4c Td 6h Ac] [Qd]
+o.colombini2: bets 5750 and is all-in
+ronalvieira: raises 6750 to 12500 and is all-in
+rona17 leaves the table
+sal112233 joins the table at seat #8 
+Tireur26: folds [8c 7h]
+Uncalled bet (6750) returned to ronalvieira
+*** SHOW DOWN ***
+ronalvieira: shows [Ah Kc] (a pair of Aces)
+o.colombini2: shows [Th Ks] (a pair of Tens)
+ronalvieira collected 118125 from pot
+*** SUMMARY ***
+Total pot 125000 | Rake 6875 
+Board [4c Td 6h Ac Qd]
+Seat 8: rona17
+Seat 1: o.colombini2 (small blind) showed [Th Ks] and lost with a pair of Tens
+Seat 2: anabela481 (big blind) folded before Flop
+Seat 3: guiller1947 folded before Flop (didn't bet)
+Seat 4: superMagnif folded before Flop (didn't bet)
+Seat 5: mdz_javier folded before Flop (didn't bet)
+Seat 6: ederepf folded before Flop
+Seat 7: ronalvieira showed [Ah Kc] and won (118125) with a pair of Aces
+Seat 9: Tireur26 (button) folded on the River
+
+
+
+PokerStars Hand #261734051987:  Hold'em No Limit (250/500) - 2026/08/13 3:21:37 UTC [2026/08/12 23:21:37 ET]
+Table 'Fantasia II' 9-max (Play Money) Seat #1 is the button
+Seat 8: Kelly631 (50000 in chips) is sitting out
+Seat 1: o.colombini2 (66487 in chips) 
+Seat 2: anabela481 (222688 in chips) 
+Seat 3: guiller1947 (70450 in chips) 
+Seat 4: Suavek78 (49000 in chips) 
+Seat 5: mdz_javier (70285 in chips) 
+Seat 6: CaptStant99 (19500 in chips) 
+Seat 7: LORENA 19788 (1927 in chips) 
+Seat 9: Tireur26 (55932 in chips) 
+anabela481: posts small blind 250
+guiller1947: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [6c 9c]
+Suavek78: folds 
+mdz_javier: calls 500
+CaptStant99: folds 
+LORENA 19788: raises 1427 to 1927 and is all-in
+Tireur26: calls 1927
+o.colombini2: calls 1927
+anabela481: calls 1677
+guiller1947: calls 1427
+mdz_javier: calls 1427
+*** FLOP *** [2c Td 3c]
+anabela481: checks 
+guiller1947: checks 
+mdz_javier: checks 
+Tireur26: checks 
+o.colombini2: bets 5463
+anabela481: folds 
+guiller1947: calls 5463
+mdz_javier: folds 
+Tireur26: folds 
+*** TURN *** [2c Td 3c] [2s]
+guiller1947: checks 
+o.colombini2: checks 
+*** RIVER *** [2c Td 3c 2s] [6d]
+guiller1947: checks 
+o.colombini2: checks 
+*** SHOW DOWN ***
+guiller1947: shows [7c 8c] (a pair of Deuces)
+o.colombini2: shows [6c 9c] (two pair, Sixes and Deuces)
+o.colombini2 collected 10325 from side pot
+LORENA 19788: shows [Kc Kd] (two pair, Kings and Deuces)
+LORENA 19788 collected 10926 from main pot
+*** SUMMARY ***
+Total pot 22488 Main pot 10926. Side pot 10325. | Rake 1237 
+Board [2c Td 3c 2s 6d]
+Seat 8: Kelly631
+Seat 1: o.colombini2 (button) showed [6c 9c] and won (10325) with two pair, Sixes and Deuces
+Seat 2: anabela481 (small blind) folded on the Flop
+Seat 3: guiller1947 (big blind) showed [7c 8c] and lost with a pair of Deuces
+Seat 4: Suavek78 folded before Flop (didn't bet)
+Seat 5: mdz_javier folded on the Flop
+Seat 6: CaptStant99 folded before Flop (didn't bet)
+Seat 7: LORENA 19788 showed [Kc Kd] and won (10926) with two pair, Kings and Deuces
+Seat 9: Tireur26 folded on the Flop
+
+
+
+PokerStars Hand #261734116504:  Hold'em No Limit (250/500) - 2026/08/13 3:35:52 UTC [2026/08/12 23:35:52 ET]
+Table 'Fantasia II' 9-max (Play Money) Seat #7 is the button
+Seat 1: o.colombini2 (57661 in chips) 
+Seat 2: AnatolyPes (49500 in chips) 
+Seat 3: guiller1947 (73252 in chips) 
+Seat 4: MC91951 (20000 in chips) 
+Seat 5: mdz_javier (121797 in chips) 
+Seat 6: CaptStant99 (106475 in chips) 
+Seat 7: LORENA 19788 (40545 in chips) 
+Seat 8: Kelly631 (43250 in chips) 
+Seat 9: Dr Daniel154 (46041 in chips) 
+Kelly631: posts small blind 250
+Dr Daniel154: posts big blind 500
+MC91951: posts big blind 500
+*** HOLE CARDS ***
+Dealt to o.colombini2 [Th 6d]
+o.colombini2: folds 
+AnatolyPes: calls 500
+guiller1947: folds 
+MC91951: checks 
+mdz_javier: raises 2000 to 2500
+CaptStant99: raises 5395 to 7895
+LORENA 19788: calls 7895
+Kelly631: folds 
+Dr Daniel154: folds 
+AnatolyPes: folds 
+MC91951: folds 
+mdz_javier: raises 25435 to 33330
+CaptStant99: raises 73145 to 106475 and is all-in
+LORENA 19788: calls 32650 and is all-in
+mdz_javier: calls 73145
+*** FLOP *** [2c Qc 3s]
+*** TURN *** [2c Qc 3s] [Ks]
+*** RIVER *** [2c Qc 3s Ks] [Tc]
+*** SHOW DOWN ***
+mdz_javier: shows [Kh Kc] (three of a kind, Kings)
+CaptStant99: shows [Jd Jh] (a pair of Jacks)
+mdz_javier collected 124608 from side pot
+LORENA 19788: shows [Ac Ad] (a pair of Aces)
+mdz_javier collected 116599 from main pot
+*** SUMMARY ***
+Total pot 255245 Main pot 116599. Side pot 124608. | Rake 14038 
+Board [2c Qc 3s Ks Tc]
+Seat 1: o.colombini2 folded before Flop (didn't bet)
+Seat 2: AnatolyPes folded before Flop
+Seat 3: guiller1947 folded before Flop (didn't bet)
+Seat 4: MC91951 folded before Flop (didn't bet)
+Seat 5: mdz_javier showed [Kh Kc] and won (241207) with three of a kind, Kings
+Seat 6: CaptStant99 showed [Jd Jh] and lost with a pair of Jacks
+Seat 7: LORENA 19788 (button) showed [Ac Ad] and lost with a pair of Aces
+Seat 8: Kelly631 (small blind) folded before Flop
+Seat 9: Dr Daniel154 (big blind) folded before Flop
+
+
+

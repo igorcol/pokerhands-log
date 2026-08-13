@@ -59,12 +59,15 @@ function deriveOutcome(hand: Hand, hero: string): HandOutcome {
   if (!showedDown)
     return { kind: "won-without-showdown", street: finalStreet(hand.board) };
 
-  if (!hand.winners.some((w) => w.player === hero))
-    return { kind: "showdown-lost" };
-  // Jogadores distintos, não entradas: com side pot o mesmo jogador coleta duas vezes
-  // (main + side) e isso não é pote dividido.
-  const distinctWinners = new Set(hand.winners.map((w) => w.player));
-  return distinctWinners.size > 1
+  const heroWins = hand.winners.filter((w) => w.player === hero);
+  if (heroWins.length === 0) return { kind: "showdown-lost" };
+
+  // Split é dois jogadores rachando o MESMO pote. Com side pot, cada um leva um pote
+  // diferente — dois vencedores na mão, mas nenhum deles dividiu nada.
+  const sharedWithSomeone = heroWins.some((heroWin) =>
+    hand.winners.some((w) => w.pot === heroWin.pot && w.player !== hero),
+  );
+  return sharedWithSomeone
     ? { kind: "showdown-split" }
     : { kind: "showdown-won" };
 }

@@ -55,9 +55,14 @@ export interface Reveal {
     source: 'showdown' | 'summary-muck'
 }
 
+// De qual pote veio o pagamento. "single" é o caso normal (linha "from pot"); main/side
+// só aparecem quando houve all-in curto e a mesa formou potes separados.
+export type PotSource = "single" | "main" | "side";
+
 export interface Winner {
   player: string
-  amount: number // cents
+  amount: number
+  pot: PotSource
 }
 
 export interface AmbientEvent {

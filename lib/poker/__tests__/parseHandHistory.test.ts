@@ -350,14 +350,14 @@ describe("parseTotalPotAndRake", () => {
 describe("parseWinners", () => {
   it("returns a single winner for a normal hand (hand 1)", () => {
     expect(parseWinners(hands[0])).toEqual([
-      { player: "vinal33", amount: 1059300 },
+      { player: "vinal33", amount: 1059300, pot: "single" },
     ]);
   });
 
   it("returns two winners for the split pot (hand 6, armadilha #6)", () => {
     expect(parseWinners(hands[5])).toEqual([
-      { player: "KURFTERRIER", amount: 1106800 },
-      { player: "o.colombini2", amount: 1106800 },
+      { player: "KURFTERRIER", amount: 1106800, pot: "single" },
+      { player: "o.colombini2", amount: 1106800, pot: "single" },
     ]);
   });
 });

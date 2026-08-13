@@ -5,6 +5,7 @@ import type {
   Hand,
   Post,
   PostType,
+  PotSource,
   Rank,
   Reveal,
   Seat,
@@ -180,7 +181,7 @@ export function parseBoard(block: string): Card[] {
 
 // "folds [8h 2d]" acontece quando o jogador expõe a mão ao foldar. As cartas são
 // descartadas por ora — capturar viraria mais uma fonte de reveal, não é o caso agora.
-const FOLD_RE = /^(.+?): folds(?: \[[^\]]+\])?$/
+const FOLD_RE = /^(.+?): folds(?: \[[^\]]+\])?$/;
 const CHECK_RE = /^(.+?): checks$/;
 const CALL_RE = /^(.+?): calls (\d+(?:\.\d+)?)( and is all-in)?$/;
 const BET_RE = /^(.+?): bets (\d+(?:\.\d+)?)( and is all-in)?$/;
@@ -190,7 +191,7 @@ const UNCALLED_RE = /^Uncalled bet \((\d+(?:\.\d+)?)\) returned to (.+)$/;
 
 // Aparecem no meio do action stream quando a mão termina sem showdown.
 // A extração de quem ganhou fica pra Parte 5 — aqui só evita warning falso.
-const COLLECTED_RE = /^.+? collected \d+(?:\.\d+)? from (?:main |side )?pot$/
+const COLLECTED_RE = /^.+? collected \d+(?:\.\d+)? from (?:main |side )?pot$/;
 const DOESNT_SHOW_RE = /^.+?: doesn't show hand$/;
 
 // Whitelist explícita de ruído. Linha desconhecida gera warning — nunca
@@ -203,7 +204,7 @@ const AMBIENT_PATTERNS = [
   /^(.+?) joins the table at seat #\d+$/,
   /^(.+?) leaves the table$/,
   /^(.+?): is sitting out$/,
-]
+];
 
 function matchAmbient(line: string): string | null {
   for (const pattern of AMBIENT_PATTERNS) {
@@ -407,7 +408,8 @@ export function parseReveals(block: string): Reveal[] {
 
 // Com side pot, o mesmo jogador pode coletar duas vezes (main + side) — são duas
 // entradas em winners, e a soma continua batendo com o total.
-const COLLECTED_WINNER_RE = /^(.+?) collected (\d+(?:\.\d+)?) from (?:main |side )?pot$/
+const COLLECTED_WINNER_RE =
+  /^(.+?) collected (\d+(?:\.\d+)?) from (main |side )?pot$/;
 
 // Cobre tanto showdown (múltiplos "collected", split pot) quanto vitória sem
 // showdown (um só "collected" solto no meio do action stream).
@@ -416,15 +418,18 @@ export function parseWinners(block: string): Winner[] {
   for (const rawLine of block.split("\n")) {
     const match = rawLine.trim().match(COLLECTED_WINNER_RE);
     if (!match) continue;
-    const [, player, amount] = match;
-    winners.push({ player, amount: parseMoney(amount) });
+    const [, player, amount, potLabel] = match;
+    const pot: PotSource = potLabel
+      ? (potLabel.trim() as "main" | "side")
+      : "single";
+    winners.push({ player, amount: parseMoney(amount), pot });
   }
   return winners;
 }
 
 // Com side pot a linha ganha " Main pot X. Side pot Y." no meio
 // o que importa continua sendo o total e o rake.
-const TOTAL_POT_RE = /^Total pot (\d+(?:\.\d+)?).*?\| Rake (\d+(?:\.\d+)?)/
+const TOTAL_POT_RE = /^Total pot (\d+(?:\.\d+)?).*?\| Rake (\d+(?:\.\d+)?)/;
 
 export function parseTotalPotAndRake(block: string): {
   totalPot: number;
@@ -442,6 +447,22 @@ export function parseTotalPotAndRake(block: string): {
 
 const SHOWDOWN_MARKER_RE = /^\*\*\* SHOW DOWN \*\*\*/;
 const SUMMARY_MARKER_RE = /^\*\*\* SUMMARY \*\*\*/;
+
+const HOLE_CARDS_MARKER_RE = /^\*\*\* HOLE CARDS \*\*\*/;
+
+// Ruído que acontece durante os posts, antes das cartas serem distribuídas. O
+// scanActionStream só liga no *** HOLE CARDS ***, então essa faixa passava batida —
+// nem virava ambient, nem gerava warning.
+export function parsePreDealAmbientEvents(block: string): AmbientEvent[] {
+  const events: AmbientEvent[] = [];
+  for (const rawLine of block.split("\n")) {
+    const line = rawLine.trim();
+    if (HOLE_CARDS_MARKER_RE.test(line)) break;
+    const player = matchAmbient(line);
+    if (player) events.push({ player, section: "preflop", text: line });
+  }
+  return events;
+}
 
 // Faixa que o scanActionStream (Parte 4) deliberadamente não cobre: entre
 // *** SHOW DOWN *** e *** SUMMARY ***. É onde mora o "joins the table" que
@@ -486,6 +507,7 @@ export function parseHand(block: string): Hand {
     reveals: parseReveals(block),
     winners: parseWinners(block),
     ambientEvents: [
+      ...parsePreDealAmbientEvents(block),
       ...parseAmbientEvents(block),
       ...parsePostShowdownAmbientEvents(block),
     ],
