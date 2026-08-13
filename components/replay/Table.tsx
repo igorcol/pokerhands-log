@@ -76,7 +76,7 @@ export function Table({
             </div>
           </div>
         </div>
-        <CommunityBoard cards={state.board} />
+        <CommunityBoard allCards={hand.board} revealedCount={state.board.length} />
       </div>
 
       {layout.map((slot) => (

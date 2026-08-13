@@ -2,7 +2,7 @@ import { formatChips } from '@/lib/poker/format'
 import type { LastAction, SeatSlot } from '@/lib/poker/replayView'
 import type { TableState } from '@/lib/poker/tableState'
 import type { Hand } from '@/lib/poker/types'
-import { CardBack } from '@/components/poker/CardBack'
+import { FlippableCard } from '@/components/poker/FlippableCard'
 import { HoleCards } from '@/components/poker/PlayingCard'
 import { Avatar } from './Avatar'
 import { BetChips } from './BetChips'
@@ -42,6 +42,10 @@ export function TableSeat({
     const isFolded = playerState?.isFolded && !seat.isSittingOut
     const streetBet = playerState?.streetBet ?? 0
     const holeCards = playerState?.holeCards ?? null
+    // A frente do vilão vem de hand.reveals (dado estático), pra existir no DOM antes do
+    // showdown chegar. holeCards só é preenchido quando o evento de reveal roda.
+    const revealedCards = hand.reveals.find((r) => r.player === seat.playerName)?.cards ?? null
+    const isRevealed = holeCards !== null
     const isDimmed = seat.isSittingOut || isFolded
 
     const badgeText = lastAction?.isAllIn
@@ -61,15 +65,25 @@ export function TableSeat({
                     className={`z-0 -mb-4.75 flex transition-opacity duration-300 ${isDimmed ? 'opacity-0' : 'opacity-100'
                         }`}
                 >
-                    {holeCards ? (
+                    {slot.isHero && holeCards ? (
+                        // As suas ficam sempre viradas — o flip é reservado pra informação nova.
                         <HoleCards cards={holeCards} size="table" />
                     ) : (
                         <>
                             <div className="-rotate-6">
-                                <CardBack size="table" />
+                                <FlippableCard
+                                    card={revealedCards?.[0] ?? null}
+                                    faceUp={isRevealed}
+                                    size="table"
+                                />
                             </div>
                             <div className="-ml-3 rotate-6">
-                                <CardBack size="table" />
+                                <FlippableCard
+                                    card={revealedCards?.[1] ?? null}
+                                    faceUp={isRevealed}
+                                    size="table"
+                                    delayMs={90}
+                                />
                             </div>
                         </>
                     )}

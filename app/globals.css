@@ -44,4 +44,5 @@ body {
    não deve rodar. */
 [data-instant='true'] * {
   transition-duration: 0s !important;
+  transition-delay: 0s !important;
 }
