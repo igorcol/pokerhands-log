@@ -5,7 +5,7 @@ import type { Hand } from '@/lib/poker/types'
 import { FlippableCard } from '@/components/poker/FlippableCard'
 import { HoleCards } from '@/components/poker/PlayingCard'
 import { Avatar } from './Avatar'
-import { BetChips } from './BetChips'
+import { ActionBubble } from './ActionBubble'
 import { EnterTransition } from './EnterTransition'
 
 // Três camadas sobrepostas: cartas atrás, avatar no meio, placa embaixo. As cartas
@@ -48,11 +48,6 @@ export function TableSeat({
     const isRevealed = holeCards !== null
     const isDimmed = seat.isSittingOut || isFolded
 
-    const badgeText = lastAction?.isAllIn
-        ? 'ALL IN'
-        : lastAction && lastAction.amount > 0
-            ? `${lastAction.type.toUpperCase()} ${formatChips(lastAction.amount)}`
-            : null
 
     return (
         <>
@@ -95,30 +90,6 @@ export function TableSeat({
                     className="relative -mt-2 w-full rounded-2xl px-3 pb-1.5 pt-3 text-center shadow-[0_8px_22px_rgba(0,0,0,0.5)]"
                     style={{ background: slot.isHero ? 'rgba(30,30,36,0.96)' : 'rgba(20,20,24,0.94)' }}
                 >
-                    {badgeText && (
-                        <div className="absolute -top-2 left-1/2 z-3 -translate-x-1/2">
-                            <EnterTransition>
-                                <div
-                                    className="whitespace-nowrap rounded-full px-2 font-mono text-[8.5px] font-semibold tracking-wider"
-                                    style={
-                                        lastAction?.isAllIn
-                                            ? {
-                                                background: 'var(--color-carmine)',
-                                                color: '#fff',
-                                                boxShadow: '0 0 16px rgba(224,49,62,0.5)',
-                                            }
-                                            : {
-                                                background: '#2C1519',
-                                                color: 'var(--color-carmine-soft)',
-                                                boxShadow: '0 0 0 1px rgba(224,49,62,0.35)',
-                                            }
-                                    }
-                                >
-                                    {badgeText}
-                                </div>
-                            </EnterTransition>
-                        </div>
-                    )}
                     <div
                         className={`truncate text-[11.5px] font-medium ${slot.isHero ? 'text-ink' : 'text-ink-2'}`}
                     >
@@ -130,13 +101,18 @@ export function TableSeat({
                 </div>
             </div>
 
-            {streetBet > 0 && !isFolded && (
+            {!seat.isSittingOut && (
                 <div
                     className="absolute -translate-x-1/2 -translate-y-1/2"
                     style={{ left: `${betAnchor.left}%`, top: `${betAnchor.top}%` }}
                 >
-                    <EnterTransition>
-                        <BetChips amount={streetBet} bigBlind={hand.bigBlind} />
+                    <EnterTransition key={`${lastAction?.type}-${lastAction?.amount}-${streetBet}`}>
+                        <ActionBubble
+                            action={lastAction}
+                            streetBet={streetBet}
+                            bigBlind={hand.bigBlind}
+                            isFolded={Boolean(isFolded)}
+                        />
                     </EnterTransition>
                 </div>
             )}
