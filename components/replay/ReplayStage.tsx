@@ -18,6 +18,7 @@ import { Table } from './Table'
 import { ReplayHeader } from './ReplayHeader'
 import { buildEventLog } from '@/lib/poker/eventLog'
 import { EventLog } from './EventLog'
+import { deriveHandResult } from '@/lib/poker/handResult'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SPEEDS = [0.5, 1, 2] as const
@@ -71,6 +72,8 @@ export function ReplayStage({ hand }: { hand: Hand }) {
     const phase = useMemo(() => phaseAtFrame(segments, clampedFrame), [segments, clampedFrame])
 
     const logGroups = useMemo(() => buildEventLog(hand, timeline), [hand, timeline])
+
+    const result = useMemo(() => deriveHandResult(hand), [hand])
 
     useEffect(() => {
         if (!isPlaying) return
@@ -144,7 +147,12 @@ export function ReplayStage({ hand }: { hand: Hand }) {
     return (
         <div className="flex min-h-screen bg-base">
             <div className="flex min-w-0 flex-1 flex-col">
-                <ReplayHeader isLogOpen={isLogOpen} onToggleLog={() => setIsLogOpen((o) => !o)} />
+                <ReplayHeader
+                    hand={hand}
+                    result={result}
+                    isLogOpen={isLogOpen}
+                    onToggleLog={() => setIsLogOpen((o) => !o)}
+                />
                 <div className="flex min-h-0 flex-1 items-center justify-center px-10 pb-4">
                     <Table
                         hand={hand}
