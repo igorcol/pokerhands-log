@@ -45,8 +45,8 @@ describe("applyEvents", () => {
   it("produces two winners for the split pot (hand 6)", () => {
     const finalState = applyEvents(hands[5], buildTimeline(hands[5]));
     expect(finalState.winners).toEqual([
-      { player: "KURFTERRIER", amount: 1106800 },
-      { player: "o.colombini2", amount: 1106800 },
+      { player: "KURFTERRIER", amount: 1106800, pot: "single" },
+      { player: "o.colombini2", amount: 1106800, pot: "single" },
     ]);
   });
 

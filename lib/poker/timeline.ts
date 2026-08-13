@@ -86,12 +86,12 @@ export function buildTimeline(hand: Hand): ReplayEvent[] {
   const played = streetsPlayed(hand.board);
   const ambientBySection = groupAmbientBySection(hand.ambientEvents);
 
-  for (const winner of hand.winners) {
+  for (const post of hand.posts) {
     events.push({
-      kind: "collect",
-      player: winner.player,
-      amount: winner.amount,
-      pot: winner.pot,
+      kind: "post",
+      player: post.player,
+      postType: post.type,
+      amount: post.amount,
     });
   }
 

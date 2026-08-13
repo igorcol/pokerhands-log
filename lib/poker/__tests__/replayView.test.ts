@@ -198,7 +198,7 @@ describe('frameIntervalMs', () => {
       { kind: 'action', street: 'flop', player: 'x', type: 'call', amount: 1, totalBet: 1, isAllIn: false },
       { kind: 'uncalled-return', player: 'x', amount: 1 },
       { kind: 'reveal', player: 'x', cards: [], description: null, source: 'showdown' },
-      { kind: 'collect', player: 'x', amount: 1 },
+      { kind: "collect", player: "x", amount: 1, pot: "single" },
     ]
 
     for (const event of others) {
