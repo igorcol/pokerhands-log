@@ -50,15 +50,17 @@ export function parseCard(raw: string): Card {
 
 // Fatiado por lookahead no header, não por linha em branco, a contagem de linhas em branco entre mãos não é garantida pelo formato.
 export function splitHandBlocks(text: string): string[] {
-  const normalized = text.replace(/\r\n/g, "\n");
+  // Arquivos novos vêm com BOM UTF-8; sem remover, o primeiro header nunca casa.
+  const normalized = text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
   return normalized
     .split(/(?=^PokerStars Hand #\d+:)/m)
     .map((block) => block.trim())
     .filter((block) => block.length > 0);
 }
 
+// A hora pode vir sem zero à esquerda ("2:52:33"), o resto não.
 const HEADER_RE =
-  /^PokerStars Hand #(\d+):\s+Hold'em No Limit \(\$?(\d+(?:\.\d+)?)\/\$?(\d+(?:\.\d+)?)\) - (\d{4})\/(\d{2})\/(\d{2}) (\d{2}):(\d{2}):(\d{2}) UTC/;
+  /^PokerStars Hand #(\d+):\s+Hold'em No Limit \(\$?(\d+(?:\.\d+)?)\/\$?(\d+(?:\.\d+)?)\) - (\d{4})\/(\d{2})\/(\d{2}) (\d{1,2}):(\d{2}):(\d{2}) UTC/;
 
 export function parseHeader(block: string) {
   const line = block.split("\n")[0];
@@ -69,7 +71,7 @@ export function parseHeader(block: string) {
   const [, id, sb, bb, year, month, day, hour, minute, second] = match;
   return {
     id,
-    dateIso: `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`,
+    dateIso: `${year}-${month}-${day}T${hour.padStart(2, "0")}:${minute}:${second}.000Z`,
     smallBlind: parseMoney(sb),
     bigBlind: parseMoney(bb),
   };
@@ -176,7 +178,9 @@ export function parseBoard(block: string): Card[] {
   return board;
 }
 
-const FOLD_RE = /^(.+?): folds$/;
+// "folds [8h 2d]" acontece quando o jogador expõe a mão ao foldar. As cartas são
+// descartadas por ora — capturar viraria mais uma fonte de reveal, não é o caso agora.
+const FOLD_RE = /^(.+?): folds(?: \[[^\]]+\])?$/
 const CHECK_RE = /^(.+?): checks$/;
 const CALL_RE = /^(.+?): calls (\d+(?:\.\d+)?)( and is all-in)?$/;
 const BET_RE = /^(.+?): bets (\d+(?:\.\d+)?)( and is all-in)?$/;
@@ -186,17 +190,20 @@ const UNCALLED_RE = /^Uncalled bet \((\d+(?:\.\d+)?)\) returned to (.+)$/;
 
 // Aparecem no meio do action stream quando a mão termina sem showdown.
 // A extração de quem ganhou fica pra Parte 5 — aqui só evita warning falso.
-const COLLECTED_RE = /^.+? collected \d+(?:\.\d+)? from pot$/;
+const COLLECTED_RE = /^.+? collected \d+(?:\.\d+)? from (?:main |side )?pot$/
 const DOESNT_SHOW_RE = /^.+?: doesn't show hand$/;
 
 // Whitelist explícita de ruído. Linha desconhecida gera warning — nunca
 // descarte silencioso (ver OVERVIEW.md).
 const AMBIENT_PATTERNS = [
   /^(.+?) is connected$/,
+  /^(.+?) is disconnected$/,
   /^(.+?) has timed out$/,
+  /^(.+?) has timed out while disconnected$/,
   /^(.+?) joins the table at seat #\d+$/,
   /^(.+?) leaves the table$/,
-];
+  /^(.+?): is sitting out$/,
+]
 
 function matchAmbient(line: string): string | null {
   for (const pattern of AMBIENT_PATTERNS) {
@@ -398,7 +405,9 @@ export function parseReveals(block: string): Reveal[] {
   return reveals;
 }
 
-const COLLECTED_WINNER_RE = /^(.+?) collected (\d+(?:\.\d+)?) from pot$/;
+// Com side pot, o mesmo jogador pode coletar duas vezes (main + side) — são duas
+// entradas em winners, e a soma continua batendo com o total.
+const COLLECTED_WINNER_RE = /^(.+?) collected (\d+(?:\.\d+)?) from (?:main |side )?pot$/
 
 // Cobre tanto showdown (múltiplos "collected", split pot) quanto vitória sem
 // showdown (um só "collected" solto no meio do action stream).
@@ -413,7 +422,9 @@ export function parseWinners(block: string): Winner[] {
   return winners;
 }
 
-const TOTAL_POT_RE = /^Total pot (\d+(?:\.\d+)?) \| Rake (\d+(?:\.\d+)?)/;
+// Com side pot a linha ganha " Main pot X. Side pot Y." no meio
+// o que importa continua sendo o total e o rake.
+const TOTAL_POT_RE = /^Total pot (\d+(?:\.\d+)?).*?\| Rake (\d+(?:\.\d+)?)/
 
 export function parseTotalPotAndRake(block: string): {
   totalPot: number;

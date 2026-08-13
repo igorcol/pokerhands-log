@@ -169,7 +169,7 @@ export function frameIntervalMs(event: ReplayEvent): number {
     case "deal-hole":
       return 1400;
     case "action":
-      if (event.isAllIn) return 2300;
+      if (event.isAllIn) return 3000;
       if (event.type === "bet" || event.type === "raise") return 2400;
       if (event.type === "call") return 1800;
       return 1400;
