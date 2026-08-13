@@ -5,6 +5,7 @@ import type {
   Card,
   Hand,
   PostType,
+  PotSource,
   Street,
 } from "./types";
 
@@ -34,7 +35,7 @@ export type ReplayEvent =
       description: string | null;
       source: "showdown" | "summary-muck";
     }
-  | { kind: "collect"; player: string; amount: number }
+  | { kind: "collect"; player: string; amount: number; pot: PotSource }
   | { kind: "ambient"; player: string | null; text: string };
 
 const STREET_ORDER: Street[] = ["preflop", "flop", "turn", "river"];
@@ -85,12 +86,12 @@ export function buildTimeline(hand: Hand): ReplayEvent[] {
   const played = streetsPlayed(hand.board);
   const ambientBySection = groupAmbientBySection(hand.ambientEvents);
 
-  for (const post of hand.posts) {
+  for (const winner of hand.winners) {
     events.push({
-      kind: "post",
-      player: post.player,
-      postType: post.type,
-      amount: post.amount,
+      kind: "collect",
+      player: winner.player,
+      amount: winner.amount,
+      pot: winner.pot,
     });
   }
 
@@ -151,6 +152,7 @@ export function buildTimeline(hand: Hand): ReplayEvent[] {
       kind: "collect",
       player: winner.player,
       amount: winner.amount,
+      pot: winner.pot,
     });
   }
 

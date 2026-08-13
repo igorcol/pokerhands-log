@@ -39,9 +39,11 @@ export function listAccounts(): string[] {
   const root = handHistoryDir();
   // Pasta ausente é estado normal, não erro: acontece em qualquer máquina sem PokerStars
   // instalado, e em qualquer deploy remoto. Erro de permissão continua estourando.
-  if (!existsSync(root)) return [];
+  // turbopackIgnore: o caminho aponta pra fora do projeto (AppData) e é resolvido em
+  // runtime — sem isto o Turbopack empacota o projeto inteiro "por precaução".
+  if (!existsSync(/*turbopackIgnore: true*/ root)) return [];
   try {
-    return readdirSync(root, { withFileTypes: true })
+    return readdirSync(/*turbopackIgnore: true*/ root, { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .sort();
@@ -63,8 +65,8 @@ function readFileHands(filePath: string): Hand[] {
 }
 
 export function readAccountHands(account: string): AccountHands {
-  const dir = join(handHistoryDir(), account);
-  const files = readdirSync(dir).filter((name) =>
+  const dir = join(/*turbopackIgnore: true*/ handHistoryDir(), account);
+  const files = readdirSync(/*turbopackIgnore: true*/ dir).filter((name) =>
     name.toLowerCase().endsWith(".txt"),
   );
 
@@ -73,7 +75,7 @@ export function readAccountHands(account: string): AccountHands {
 
   for (const file of files) {
     try {
-      hands.push(...readFileHands(join(dir, file)));
+      hands.push(...readFileHands(join(/*turbopackIgnore: true*/ dir, file)));
     } catch (error) {
       // Um arquivo de torneio (ou corrompido) não pode derrubar a leitura inteira —
       // registra e segue, pra UI poder avisar sem perder as mãos que deram certo.

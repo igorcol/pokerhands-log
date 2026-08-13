@@ -106,7 +106,7 @@ function applyEvent(state: TableState, event: ReplayEvent): void {
       if (player) player.stack += event.amount;
       state.winners = [
         ...state.winners,
-        { player: event.player, amount: event.amount },
+        { player: event.player, amount: event.amount, pot: event.pot },
       ];
       return;
     }
